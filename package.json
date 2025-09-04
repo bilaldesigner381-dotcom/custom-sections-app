@@ -2,6 +2,7 @@
   "name": "section-master",
   "private": true,
   "scripts": {
+    "vercel-build": "prisma generate && remix vite:build",
     "build": "npm run setup && remix vite:build",
     "dev": "shopify app dev",
     "config:link": "shopify app config link",

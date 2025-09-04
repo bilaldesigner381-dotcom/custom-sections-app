@@ -1,0 +1,84 @@
+{% comment %}
+  ✅ Announcement Countdown Snippet
+  Handles rendering of announcement bar + countdown
+{% endcomment %}
+
+<div class="announcement-bar {% if block.settings.default_bg != 'none' %} bg-{{ block.settings.default_bg }} {% endif %}"  
+     style="background-color: {{ block.settings.bg_color }}; {% if block.settings.bg_image != blank %} background-image: url({{ block.settings.bg_image | image_url: width: 1600 }}); background-size: cover; background-position: center; {% endif %}">
+  
+  <div class="announcement-content" style="color: {{ block.settings.text_color }};">
+    <span class="announcement-text" style="font-size: {{ block.settings.announcement_font_size }}px; margin:0; line-height:1.2;">
+      {{ block.settings.announcement_text }}
+    </span>
+
+    {% if block.settings.enable_timer %}
+      <div class="countdown-wrapper">
+        <span class="countdown-heading">Sales ends in:</span>
+        <div id="countdown-timer-{{ block.id }}" class="countdown"></div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .announcement-bar { width: 100%; position: relative; z-index: 50; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+  .announcement-content { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2px; padding: 12px; text-align: center; font-weight: 500; }
+  .countdown-wrapper { display: flex; flex-direction: column; align-items: center; gap: 2px; margin: 0; }
+  .countdown-heading { font-size: 0.95em; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin: 0; line-height: 1.2; }
+  .countdown { display: flex; gap: 10px; justify-content: center; margin: 0; }
+  .countdown-item { display: flex; flex-direction: column; align-items: center; font-weight: bold; margin: 0; }
+  .countdown-number { font-size: var(--countdown-size, 1.6em); background: rgba(255,255,255,0.15); padding: 4px 8px; border-radius: 6px; margin: 0; }
+  .countdown-label { font-size: 0.75em; text-transform: uppercase; letter-spacing: 0.3px; margin: 0; line-height: 1.1; }
+  .bg-gradient1 { background: linear-gradient(135deg, #ff7e5f, #feb47b); }
+  .bg-gradient2 { background: linear-gradient(135deg, #6a11cb, #2575fc); }
+  .bg-gradient3 { background: linear-gradient(135deg, #11998e, #38ef7d); }
+  .bg-pattern1 { background: url('https://cdn.shopify.com/s/files/1/0533/2089/files/pattern-light.png') repeat; }
+</style>
+
+{% if block.settings.enable_timer %}
+  <script>
+    (function() {
+      var countdownElement = document.getElementById("countdown-timer-{{ block.id }}");
+      if (!countdownElement) return;
+
+      var countdownDate = new Date("{{ block.settings.end_date }}").getTime();
+
+      function updateCountdown() {
+        var now = new Date().getTime();
+        var distance = countdownDate - now;
+
+        if (distance < 0) {
+          countdownElement.innerHTML = "<span>Expired</span>";
+          return;
+        }
+
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        countdownElement.innerHTML = `
+          <div class="countdown-item">
+            <div class="countdown-number" style="font-size: {{ block.settings.countdown_font_size }}px;">${days}</div>
+            <div class="countdown-label">Days</div>
+          </div>
+          <div class="countdown-item">
+            <div class="countdown-number" style="font-size: {{ block.settings.countdown_font_size }}px;">${hours}</div>
+            <div class="countdown-label">Hours</div>
+          </div>
+          <div class="countdown-item">
+            <div class="countdown-number" style="font-size: {{ block.settings.countdown_font_size }}px;">${minutes}</div>
+            <div class="countdown-label">Minutes</div>
+          </div>
+          <div class="countdown-item">
+            <div class="countdown-number" style="font-size: {{ block.settings.countdown_font_size }}px;">${seconds}</div>
+            <div class="countdown-label">Seconds</div>
+          </div>
+        `;
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    })();
+  </script>
+{% endif %}

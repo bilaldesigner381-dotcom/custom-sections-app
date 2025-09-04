@@ -1,0 +1,93 @@
+<div class="sticky-whatsapp">
+  <a href="https://wa.me/{{ block.settings.phone_number | remove: '+' }}?text={{ block.settings.default_message | url_encode }}"
+     target="_blank"
+     class="whatsapp-link">
+    {% if block.settings.custom_icon != blank %}
+      <img src="{{ block.settings.custom_icon | image_url }}" 
+           alt="WhatsApp" 
+           class="whatsapp-icon">
+    {% else %}
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" 
+           alt="WhatsApp" 
+           class="whatsapp-icon">
+    {% endif %}
+  </a>
+</div>
+
+<style>
+.sticky-whatsapp {
+  position: fixed;
+  bottom: {{ block.settings.position_bottom }}px;
+  right: {{ block.settings.position_right }}px;
+  z-index: 9999;
+}
+
+.whatsapp-link {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.whatsapp-link:hover {
+  transform: scale(1.1);
+}
+
+.whatsapp-icon {
+  width: {{ block.settings.icon_size }}px;
+  height: {{ block.settings.icon_size }}px;
+}
+</style>
+
+{% schema %}
+{
+  "name": "WhatsApp Button",
+  "target": "body",
+  "settings": [
+    {
+      "type": "text",
+      "id": "phone_number",
+      "label": "WhatsApp Phone Number",
+      "default": "+1234567890"
+    },
+    {
+      "type": "text",
+      "id": "default_message",
+      "label": "Default Message",
+      "default": "Hello! I have a question."
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_icon",
+      "label": "Custom WhatsApp Icon"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon Size (px)",
+      "min": 30,
+      "max": 100,
+      "step": 2,
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "position_bottom",
+      "label": "Distance from Bottom (px)",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "position_right",
+      "label": "Distance from Right (px)",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "default": 20
+    }
+  ]
+}
+{% endschema %}
+
+

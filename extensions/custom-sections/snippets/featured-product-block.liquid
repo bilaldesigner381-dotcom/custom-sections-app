@@ -1,0 +1,106 @@
+{% comment %}
+  ✅ Featured Product(s) Snippet
+  Handles both single product and collection slider modes
+{% endcomment %}
+
+<div class="featured-product-section" style="background: {{ block.settings.bg_color }}; padding: {{ block.settings.section_padding }}px 0;">
+  <div class="featured-product-container">
+    {% if block.settings.heading != blank %}
+      <h2 class="featured-heading" style="font-size: {{ block.settings.heading_size }}px;">
+        {{ block.settings.heading }}
+      </h2>
+    {% endif %}
+
+    {% if block.settings.subheading != blank %}
+      <p class="featured-subheading">{{ block.settings.subheading }}</p>
+    {% endif %}
+
+    {% if block.settings.enable_slider %}
+      <!-- Slider Mode -->
+      {% assign collection = collections[block.settings.collection] %}
+      {% if collection and collection.products.size > 0 %}
+        <div class="featured-slider" id="featured-slider">
+          {% for product in collection.products %}
+            <div class="featured-slide">
+              <a href="{{ product.url }}" class="featured-product-card-link" style="text-decoration:none; color: inherit;">
+                <div class="featured-product-card">
+                  {% if product.featured_image %}
+                    <img src="{{ product.featured_image | image_url: width: 500 }}" alt="{{ product.title | escape }}">
+                  {% endif %}
+                  <h3 class="product-title" style="font-size: {{ block.settings.title_size }}px;">{{ product.title }}</h3>
+                  <p class="product-price" style="font-size: {{ block.settings.price_size }}px;">{{ product.price | money }}</p>
+
+                  <form action="/cart/add" method="post" class="add-to-cart-form">
+                    <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+                    <button type="submit" class="add-to-cart-btn" style="font-size: {{ block.settings.button_font_size }}px; background: {{ block.settings.button_bg_color }}; color: {{ block.settings.button_text_color }}; display:inline-block; padding:12px 24px; border-radius:8px; margin-top:10px;">
+                      {{ block.settings.button_text }}
+                    </button>
+                  </form>
+                </div>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p style="text-align:center; color:red;">⚠ Please select a collection with products.</p>
+      {% endif %}
+    {% else %}
+      <!-- Single Product Mode -->
+      {% assign product = all_products[block.settings.product] %}
+      {% if product %}
+        <a href="{{ product.url }}" class="featured-product-wrapper-link" style="text-decoration:none; color: inherit;">
+          <div class="featured-product-wrapper">
+            <div class="featured-product-image">
+              {% if product.featured_image %}
+                <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title | escape }}">
+              {% endif %}
+            </div>
+            <div class="featured-product-info">
+              <h3 class="product-title" style="font-size: {{ block.settings.title_size }}px;">{{ product.title }}</h3>
+              <p class="product-price" style="font-size: {{ block.settings.price_size }}px;">{{ product.price | money }}</p>
+              {% if product.description != blank %}
+                <div class="product-description">{{ product.description | strip_html | truncate: 200 }}</div>
+              {% endif %}
+              <form action="/cart/add" method="post">
+                <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+                <button type="submit" class="add-to-cart-btn" style="font-size: {{ block.settings.button_font_size }}px; background: {{ block.settings.button_bg_color }}; color: {{ block.settings.button_text_color }}; display:inline-block; padding:12px 24px; border-radius:8px; margin-top:10px;">
+                  {{ block.settings.button_text }}
+                </button>
+              </form>
+            </div>
+          </div>
+        </a>
+      {% else %}
+        <p style="text-align:center; color:red;">⚠ Please select a product.</p>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .featured-product-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; text-align: center; }
+  .featured-heading { font-weight: 700; margin-bottom: 10px; }
+  .featured-subheading { margin-bottom: 40px; font-size: 1.2rem; color: #555; }
+  .featured-product-wrapper, .featured-product-card-link { display: flex; align-items: center; justify-content: center; gap: 40px; flex-wrap: wrap; transition: transform 0.2s ease; }
+  .featured-product-wrapper:hover, .featured-product-card-link:hover { transform: translateY(-3px); }
+  .featured-product-image { flex: 1 1 300px; max-width: 500px; }
+  .featured-product-image img { width: 100%; height: auto; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); transition: transform 0.3s ease; }
+  .featured-product-image img:hover { transform: scale(1.03); }
+  .featured-product-info { flex: 1 1 300px; max-width: 500px; text-align: left; }
+  .product-title { font-weight: bold; margin: 10px 0; }
+  .product-price { color: #e63946; margin-bottom: 10px; }
+  .add-to-cart-btn { font-weight: bold; cursor: pointer; transition: transform 0.2s ease; }
+  .add-to-cart-btn:hover { transform: translateY(-3px); }
+  .featured-slider { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 20px; padding: 10px; }
+  .featured-slide { flex: 0 0 300px; scroll-snap-align: start; }
+  .featured-product-card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); text-align: center; }
+  .featured-product-card img { max-width: 100%; border-radius: 8px; margin-bottom: 15px; }
+  @media (max-width: 767px) {
+    .featured-product-wrapper, .featured-product-card-link { flex-direction: column; text-align: center; }
+    .featured-product-image { max-width: 100%; }
+    .featured-product-info { max-width: 100%; text-align: center; margin-top: 20px; }
+    .product-title { font-size: 1.2rem !important; }
+    .product-price { font-size: 1rem !important; }
+    .add-to-cart-btn { width: 100%; display: inline-block; }
+  }
+</style>

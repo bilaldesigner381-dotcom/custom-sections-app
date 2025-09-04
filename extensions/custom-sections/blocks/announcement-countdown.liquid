@@ -1,0 +1,62 @@
+{% comment %}
+  Announcement Countdown Block with page visibility
+{% endcomment %}
+
+{% assign show_block = false %}
+
+{%- case block.settings.page_visibility -%}
+  {%- when "all" -%}
+    {% assign show_block = true %}
+  {%- when "homepage" -%}
+    {% if template == "index" %}{% assign show_block = true %}{% endif %}
+  {%- when "product" -%}
+    {% if template contains "product" %}{% assign show_block = true %}{% endif %}
+  {%- when "collection" -%}
+    {% if template contains "collection" %}{% assign show_block = true %}{% endif %}
+  {%- when "page" -%}
+    {% if template contains "page" %}{% assign show_block = true %}{% endif %}
+{%- endcase -%}
+
+{% if show_block %}
+  {% render 'announcement-countdown-block', block: block %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Announcement Countdown",
+  "target": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "page_visibility",
+      "label": "Show on",
+      "default": "homepage",
+      "options": [
+        { "value": "all", "label": "All pages" },
+        { "value": "homepage", "label": "Homepage only" },
+        { "value": "product", "label": "Product pages only" },
+        { "value": "collection", "label": "Collection pages only" },
+        { "value": "page", "label": "Content pages only" }
+      ]
+    },
+    { "type": "text", "id": "announcement_text", "label": "Announcement Text", "default": "🔥 Big Sale! Limited Time Only!" },
+    { "type": "range", "id": "announcement_font_size", "label": "Announcement Font Size (px)", "min": 12, "max": 48, "step": 2, "default": 20 },
+    { "type": "checkbox", "id": "enable_timer", "label": "Enable Countdown Timer", "default": true },
+    { "type": "text", "id": "end_date", "label": "Countdown End Date (YYYY-MM-DDTHH:MM:SS)", "default": "2025-12-31T23:59:59" },
+    { "type": "range", "id": "countdown_font_size", "label": "Countdown Number Font Size (px)", "min": 14, "max": 60, "step": 2, "default": 28 },
+    { "type": "image_picker", "id": "bg_image", "label": "Background Image" },
+    { "type": "select", "id": "default_bg", "label": "Pre-made Background",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "gradient1", "label": "Sunset Gradient" },
+        { "value": "gradient2", "label": "Purple-Blue Gradient" },
+        { "value": "gradient3", "label": "Teal-Green Gradient" },
+        { "value": "pattern1", "label": "Light Pattern" }
+      ], "default": "none"
+    },
+    { "type": "color", "id": "bg_color", "label": "Background Color (fallback if no image or pre-made)", "default": "#ffffff" },
+    { "type": "range", "id": "section_padding", "label": "Section Padding (px)", "min": 0, "max": 100, "step": 5, "default": 15 },
+    { "type": "color", "id": "text_color", "label": "Text Color", "default": "#000000" }
+  ]
+}
+{% endschema %}

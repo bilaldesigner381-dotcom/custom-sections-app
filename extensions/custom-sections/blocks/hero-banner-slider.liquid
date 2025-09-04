@@ -1,0 +1,137 @@
+{% comment %}
+  Hero Banner Slider – Only show on Homepage
+{% endcomment %}
+
+{% assign template = template.name %}
+
+{% if template == 'index' %}
+<div class="hero-banner-section"
+     style="
+       background: {{ block.settings.bg_color }};
+       padding: {{ block.settings.section_padding }}px 0;
+       --hero-h-size-desktop: {{ block.settings.heading_size_desktop }}px;
+       --hero-h-size-mobile: {{ block.settings.heading_size_mobile }}px;
+       --hero-h-color: {{ block.settings.heading_color }};
+       --hero-sub-size-desktop: {{ block.settings.subheading_size_desktop }}px;
+       --hero-sub-size-mobile: {{ block.settings.subheading_size_mobile }}px;
+       --hero-sub-color: {{ block.settings.subheading_color }};
+       --hero-text-align: {{ block.settings.text_vertical_align }};
+     ">
+  <div class="hero-banner-wrapper">
+    <!-- LEFT TEXT -->
+    <div class="hero-text">
+      {% if block.settings.heading != blank %}
+        <h2 class="hero-heading">{{ block.settings.heading }}</h2>
+      {% endif %}
+      {% if block.settings.subheading != blank %}
+        <p class="hero-subheading">{{ block.settings.subheading }}</p>
+      {% endif %}
+      {% if block.settings.button_text != blank %}
+        <a href="{{ block.settings.button_link }}" class="hero-btn"
+           style="font-size: {{ block.settings.button_font_size }}px; background: {{ block.settings.button_bg_color }}; color: {{ block.settings.button_text_color }};">
+          {{ block.settings.button_text }}
+        </a>
+      {% endif %}
+    </div>
+
+    <!-- RIGHT IMAGE -->
+    <div class="hero-image">
+      {% if block.settings.main_image_1 != blank %}
+        <img id="hero-main-image" src="{{ block.settings.main_image_1 | image_url: width: 800 }}" alt="Hero Image">
+      {% endif %}
+
+      <!-- THUMBNAILS SLIDER -->
+      <div class="hero-thumbnails">
+        {% for i in (1..6) %}
+          {% assign image_setting = 'main_image_' | append: i %}
+          {% if block.settings[image_setting] != blank %}
+            <img src="{{ block.settings[image_setting] | image_url: width: 150 }}"
+                 data-full="{{ block.settings[image_setting] | image_url: width: 800 }}"
+                 class="hero-thumbnail"
+                 alt="Thumb {{ i }}">
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<style>
+.hero-banner-wrapper { display: flex; justify-content: space-between; gap: 40px; flex-wrap: nowrap; align-items: var(--hero-text-align, center); }
+.hero-text { flex: 1; text-align: left; }
+.hero-heading { font-weight: 700; margin-bottom: 10px; font-size: var(--hero-h-size-desktop); color: var(--hero-h-color); }
+.hero-subheading { font-size: var(--hero-sub-size-desktop); margin-bottom: 20px; color: var(--hero-sub-color); }
+.hero-image { flex: 1; text-align: right; }
+.hero-image img { max-width: 100%; border-radius: 12px; box-shadow: 0 6px 18px rgba(0,0,0,0.15); transition: transform 0.3s ease; }
+.hero-image img:hover { transform: scale(1.02); }
+.hero-thumbnails { display: flex; gap: 10px; margin-top: 15px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding-bottom: 8px; }
+.hero-thumbnail { flex: 0 0 auto; width: 90px; border-radius: 6px; cursor: pointer; transition: transform 0.2s ease, border 0.2s ease; scroll-snap-align: center; }
+.hero-thumbnail:hover { transform: scale(1.1); border: 2px solid #000; }
+.hero-btn { display: inline-block; padding: 12px 24px; border-radius: 8px; font-weight: bold; text-decoration: none; transition: transform 0.2s ease; }
+.hero-btn:hover { transform: translateY(-3px); }
+@media (max-width: 767px) {
+  .hero-banner-wrapper { flex-direction: row; gap: 12px; }
+  .hero-text { flex: 3; text-align: left; }
+  .hero-image { flex: 1; text-align: right; }
+  .hero-image img { max-width: 85%; }
+  .hero-thumbnail { width: 65px; }
+  .hero-heading { font-size: var(--hero-h-size-mobile); }
+  .hero-subheading { font-size: var(--hero-sub-size-mobile); }
+  .hero-thumbnails { max-width: 220px; margin: 10px auto 0; }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var mainImg = document.getElementById('hero-main-image');
+  if (!mainImg) return;
+
+  var thumbs = document.querySelectorAll('.hero-thumbnail');
+  thumbs.forEach(function(thumb) {
+    var full = thumb.getAttribute('data-full');
+    thumb.addEventListener('mouseenter', function() {
+      if (window.innerWidth > 767 && full) { mainImg.src = full; }
+    });
+    thumb.addEventListener('click', function() {
+      if (full) { mainImg.src = full; }
+    });
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Hero Banner Slider",
+  "target": "section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "New Season Styles You’ll Love" },
+    { "type": "color", "id": "heading_color", "label": "Heading Color", "default": "#000000" },
+    { "type": "range", "id": "heading_size_desktop", "label": "Heading Font Size (Desktop)", "min": 16, "max": 80, "step": 2, "default": 36 },
+    { "type": "range", "id": "heading_size_mobile", "label": "Heading Font Size (Mobile)", "min": 14, "max": 40, "step": 1, "default": 20 },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Discover fresh arrivals made for comfort, quality, and everyday style" },
+    { "type": "color", "id": "subheading_color", "label": "Subheading Color", "default": "#555555" },
+    { "type": "range", "id": "subheading_size_desktop", "label": "Subheading Font Size (Desktop)", "min": 12, "max": 40, "step": 1, "default": 18 },
+    { "type": "range", "id": "subheading_size_mobile", "label": "Subheading Font Size (Mobile)", "min": 10, "max": 30, "step": 1, "default": 14 },
+    { "type": "text", "id": "button_text", "label": "Button Text", "default": "Shop Now" },
+    { "type": "url", "id": "button_link", "label": "Button Link" },
+    { "type": "range", "id": "button_font_size", "label": "Button Font Size", "min": 10, "max": 30, "step": 1, "default": 16 },
+    { "type": "color", "id": "button_bg_color", "label": "Button Background Color", "default": "#000000" },
+    { "type": "color", "id": "button_text_color", "label": "Button Text Color", "default": "#ffffff" },
+    { "type": "color", "id": "bg_color", "label": "Section Background Color", "default": "#f9f9f9" },
+    { "type": "range", "id": "section_padding", "label": "Section Padding (px)", "min": 0, "max": 100, "step": 5, "default": 40 },
+    { "type": "select", "id": "text_vertical_align", "label": "Text Vertical Alignment", "options": [
+        { "value": "flex-start", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "flex-end", "label": "Bottom" }
+      ], "default": "center"
+    },
+    { "type": "image_picker", "id": "main_image_1", "label": "Main Image 1" },
+    { "type": "image_picker", "id": "main_image_2", "label": "Main Image 2" },
+    { "type": "image_picker", "id": "main_image_3", "label": "Main Image 3" },
+    { "type": "image_picker", "id": "main_image_4", "label": "Main Image 4" },
+    { "type": "image_picker", "id": "main_image_5", "label": "Main Image 5" },
+    { "type": "image_picker", "id": "main_image_6", "label": "Main Image 6" }
+  ]
+}
+{% endschema %}

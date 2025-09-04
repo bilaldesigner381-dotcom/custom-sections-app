@@ -1,0 +1,20 @@
+{
+  "name": "Custom Sections",
+  "blocks": [
+    { "name": "Hero Slideshow", "path": "blocks/hero-slideshow.liquid", "target": ["index","page","product","collection"] },
+    { "name": "Featured Product", "path": "blocks/featured-product.liquid", "target": ["index","page","product","collection"] },
+    { "name": "Hero Banner Slider", "path": "blocks/hero-banner-slider.liquid", "target": ["index","page","product","collection"] },
+    { "name": "Blog Highlights", "path": "blocks/blog-highlights.liquid", "target": ["index","page","product","collection"] },
+    { "name": "Testimonials", "path": "blocks/testimonials.liquid", "target": ["index","page","product","collection"] },
+    { "name": "Featured Collection", "path": "blocks/featured-collection.liquid", "target": ["index","page","product","collection"] },
+    { "name": "FAQ Accordion", "path": "blocks/faq-accordin.liquid", "target": ["index","page","product","collection"] },
+    { "name": "Announcement Countdown", "path": "blocks/announcement-countdown.liquid", "target": ["index","page","product","collection"] },
+    { "name": "Services Features", "path": "blocks/services-features.liquid", "target": ["index","page","product","collection"] },
+    { "name": "Instagram Feed", "path": "blocks/instagram-feed.liquid", "target": ["index","page","product","collection"] },
+    { "name": "Video Section", "path": "blocks/video-section.liquid", "target": ["index","page","product","collection"] },
+    { "name": "Logo Carousel", "path": "blocks/logo-carousel.liquid", "target": ["index","page","product","collection"] },
+    { "name": "Contact Map", "path": "blocks/contact-map.liquid", "target": ["index","page","product","collection"] },
+    { "name": "Newsletter Signup", "path": "blocks/newsletter-signup.liquid", "target": ["index","page","product","collection"] },
+    { "name": "WhatsApp Button", "path": "blocks/whatsapp-button.liquid", "target": ["index","page","product","collection"] }
+  ]
+}

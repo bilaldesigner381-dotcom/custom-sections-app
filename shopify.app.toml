@@ -1,0 +1,24 @@
+# shopify.app.toml
+
+name = "Section Master"
+handle = "section-master"
+client_id = "60d7693118c9254c1c2a595a8fc5d2e3"
+application_url = "https://will-viruses-surveillance-measures.trycloudflare.com"
+embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "nikshoes.myshopify.com"
+
+[access_scopes]
+scopes = "read_products,write_products,read_themes,write_themes"
+
+[auth]
+redirect_urls = ["https://will-viruses-surveillance-measures.trycloudflare.com/auth/callback", "https://will-viruses-surveillance-measures.trycloudflare.com/auth/shopify/callback", "https://will-viruses-surveillance-measures.trycloudflare.com/api/auth/callback"]
+
+[webhooks]
+api_version = "2023-10"
+
+[pos]
+embedded = true
+

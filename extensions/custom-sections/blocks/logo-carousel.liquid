@@ -1,0 +1,185 @@
+{% assign template = template.name %}
+
+{% assign show_block = false %}
+{% case block.settings.visibility %}
+  {% when 'all' %}
+    {% assign show_block = true %}
+  {% when 'home' %}
+    {% if template == 'index' %}{% assign show_block = true %}{% endif %}
+  {% when 'product' %}
+    {% if template contains 'product' %}{% assign show_block = true %}{% endif %}
+  {% when 'collection' %}
+    {% if template contains 'collection' %}{% assign show_block = true %}{% endif %}
+  {% when 'page' %}
+    {% if template contains 'page' %}{% assign show_block = true %}{% endif %}
+{% endcase %}
+
+{% if show_block %}
+<div class="logo-carousel-section" style="background: {{ block.settings.bg_color }}; padding: {{ block.settings.section_padding }}px 0; margin: {{ block.settings.section_margin }}px 0;">
+  <div class="logo-carousel-container">
+    {% if block.settings.heading != blank %}
+      <h2 class="logo-carousel-heading" style="font-size: {{ block.settings.heading_size }}px;">{{ block.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="logo-carousel-wrapper">
+      <div class="logo-carousel-track" style="animation-duration: {{ block.settings.scroll_speed }}s;">
+        <!-- First set of logos -->
+        {% for i in (1..12) %}
+          {% assign logo_id = 'logo_' | append: i %}
+          {% if block.settings[logo_id] != blank %}
+            <div class="logo-carousel-item">
+              <img src="{{ block.settings[logo_id] | image_url: width: 200 }}" alt="Brand Logo">
+            </div>
+          {% endif %}
+        {% endfor %}
+        <!-- Duplicate set of logos (for seamless loop) -->
+        {% for i in (1..12) %}
+          {% assign logo_id = 'logo_' | append: i %}
+          {% if block.settings[logo_id] != blank %}
+            <div class="logo-carousel-item">
+              <img src="{{ block.settings[logo_id] | image_url: width: 200 }}" alt="Brand Logo">
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<style>
+.logo-carousel-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+.logo-carousel-heading {
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+.logo-carousel-wrapper {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+.logo-carousel-track {
+  display: flex;
+  gap: 40px;
+  width: max-content;
+  animation: scroll-left linear infinite;
+}
+.logo-carousel-item {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logo-carousel-item img {
+  max-height: 60px;
+  max-width: 180px;
+  object-fit: contain;
+  filter: grayscale(100%);
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+.logo-carousel-item img:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+@keyframes scroll-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (max-width: 768px) {
+  .logo-carousel-track {
+    gap: 20px;
+  }
+  .logo-carousel-item img {
+    max-height: 50px;
+    max-width: 140px;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Logo Carousel",
+  "target": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "visibility",
+      "label": "Show this block on",
+      "options": [
+        { "value": "all", "label": "All pages" },
+        { "value": "home", "label": "Homepage only" },
+        { "value": "product", "label": "Product pages only" },
+        { "value": "collection", "label": "Collection pages only" },
+        { "value": "page", "label": "Custom pages only" }
+      ],
+      "default": "page"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our Partners"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "default": 28,
+      "label": "Heading Font Size"
+    },
+    { "type": "image_picker", "id": "logo_1", "label": "Logo 1" },
+    { "type": "image_picker", "id": "logo_2", "label": "Logo 2" },
+    { "type": "image_picker", "id": "logo_3", "label": "Logo 3" },
+    { "type": "image_picker", "id": "logo_4", "label": "Logo 4" },
+    { "type": "image_picker", "id": "logo_5", "label": "Logo 5" },
+    { "type": "image_picker", "id": "logo_6", "label": "Logo 6" },
+    { "type": "image_picker", "id": "logo_7", "label": "Logo 7" },
+    { "type": "image_picker", "id": "logo_8", "label": "Logo 8" },
+    { "type": "image_picker", "id": "logo_9", "label": "Logo 9" },
+    { "type": "image_picker", "id": "logo_10", "label": "Logo 10" },
+    { "type": "image_picker", "id": "logo_11", "label": "Logo 11" },
+    { "type": "image_picker", "id": "logo_12", "label": "Logo 12" },
+    {
+      "type": "range",
+      "id": "scroll_speed",
+      "min": 5,
+      "max": 60,
+      "step": 1,
+      "default": 25,
+      "label": "Scroll Speed (seconds)"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 40,
+      "label": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "section_margin",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 20,
+      "label": "Section Margin"
+    }
+  ]
+}
+{% endschema %}
+

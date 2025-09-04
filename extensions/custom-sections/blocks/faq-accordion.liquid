@@ -1,0 +1,207 @@
+{% assign template = template.name %}
+
+{% assign show_block = false %}
+{% case block.settings.visibility %}
+  {% when 'all' %}
+    {% assign show_block = true %}
+  {% when 'home' %}
+    {% if template == 'index' %}{% assign show_block = true %}{% endif %}
+  {% when 'product' %}
+    {% if template contains 'product' %}{% assign show_block = true %}{% endif %}
+  {% when 'collection' %}
+    {% if template contains 'collection' %}{% assign show_block = true %}{% endif %}
+  {% when 'page' %}
+    {% if template contains 'page' %}{% assign show_block = true %}{% endif %}
+{% endcase %}
+
+{% if show_block %}
+<div class="faq-accordion" 
+     style="margin: {{ block.settings.section_margin }}px auto; 
+            padding: {{ block.settings.section_padding }}px; 
+            background-color: {{ block.settings.section_bg_color }};">
+  <h2 class="faq-heading" 
+      style="font-size: {{ block.settings.heading_size }}px; color: {{ block.settings.heading_color }};">
+    {{ block.settings.heading }}
+  </h2>
+
+  <div class="faq-items">
+
+    {% if block.settings.faq_1_question != blank %}
+    <div class="faq-item">
+      <button class="faq-question"
+        style="font-size: {{ block.settings.question_size }}px; color: {{ block.settings.question_color }};">
+        {{ block.settings.faq_1_question }} <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer"
+        style="font-size: {{ block.settings.answer_size }}px; color: {{ block.settings.answer_color }};">
+        <p>{{ block.settings.faq_1_answer }}</p>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if block.settings.faq_2_question != blank %}
+    <div class="faq-item">
+      <button class="faq-question"
+        style="font-size: {{ block.settings.question_size }}px; color: {{ block.settings.question_color }};">
+        {{ block.settings.faq_2_question }} <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer"
+        style="font-size: {{ block.settings.answer_size }}px; color: {{ block.settings.answer_color }};">
+        <p>{{ block.settings.faq_2_answer }}</p>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if block.settings.faq_3_question != blank %}
+    <div class="faq-item">
+      <button class="faq-question"
+        style="font-size: {{ block.settings.question_size }}px; color: {{ block.settings.question_color }};">
+        {{ block.settings.faq_3_question }} <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer"
+        style="font-size: {{ block.settings.answer_size }}px; color: {{ block.settings.answer_color }};">
+        <p>{{ block.settings.faq_3_answer }}</p>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if block.settings.faq_4_question != blank %}
+    <div class="faq-item">
+      <button class="faq-question"
+        style="font-size: {{ block.settings.question_size }}px; color: {{ block.settings.question_color }};">
+        {{ block.settings.faq_4_question }} <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer"
+        style="font-size: {{ block.settings.answer_size }}px; color: {{ block.settings.answer_color }};">
+        <p>{{ block.settings.faq_4_answer }}</p>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if block.settings.faq_5_question != blank %}
+    <div class="faq-item">
+      <button class="faq-question"
+        style="font-size: {{ block.settings.question_size }}px; color: {{ block.settings.question_color }};">
+        {{ block.settings.faq_5_question }} <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer"
+        style="font-size: {{ block.settings.answer_size }}px; color: {{ block.settings.answer_color }};">
+        <p>{{ block.settings.faq_5_answer }}</p>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endif %}
+
+<style>
+.faq-accordion { max-width: 800px; margin: 0 auto; }
+
+/* FAQ Heading */
+.faq-heading {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* FAQ Items */
+.faq-item { border-bottom: 1px solid #ddd; padding: 10px 0; }
+.faq-question {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.faq-icon { font-size: 1.5rem; transition: transform 0.3s ease; }
+
+/* Smooth animation for FAQ answer */
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+  margin-top: 0;
+}
+.faq-answer p { margin: 0; }
+
+/* Active state */
+.faq-item.active .faq-answer {
+  max-height: 500px;
+  margin-top: 10px;
+  padding-top: 5px;
+}
+.faq-item.active .faq-icon { transform: rotate(45deg); }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll(".faq-question").forEach(button => {
+    button.addEventListener("click", () => {
+      const item = button.closest(".faq-item");
+
+      // Close other items
+      document.querySelectorAll(".faq-item").forEach(faq => {
+        if (faq !== item) faq.classList.remove("active");
+      });
+
+      // Toggle current item
+      item.classList.toggle("active");
+    });
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "FAQ Accordion",
+  "target": "section",
+  "settings": [
+    { "type": "select", "id": "visibility", "label": "Show this block on", 
+      "options": [
+        { "value": "all", "label": "All pages" },
+        { "value": "home", "label": "Homepage only" },
+        { "value": "product", "label": "Product pages only" },
+        { "value": "collection", "label": "Collection pages only" },
+        { "value": "page", "label": "Custom pages only" }
+      ], "default": "page"
+    },
+    { "type": "text", "id": "heading", "label": "Section Heading", "default": "Frequently Asked Questions" },
+
+    { "type": "range", "id": "section_margin", "label": "Section Margin (px)", "min": 0, "max": 100, "step": 5, "unit": "px", "default": 40 },
+    { "type": "range", "id": "section_padding", "label": "Section Padding (px)", "min": 0, "max": 100, "step": 5, "unit": "px", "default": 20 },
+
+    { "type": "color", "id": "section_bg_color", "label": "Background Color", "default": "#ffffff" },
+
+    { "type": "range", "id": "heading_size", "label": "Heading Font Size", "min": 16, "max": 48, "step": 1, "unit": "px", "default": 24 },
+    { "type": "color", "id": "heading_color", "label": "Heading Color", "default": "#000000" },
+
+    { "type": "range", "id": "question_size", "label": "Question Font Size", "min": 14, "max": 32, "step": 1, "unit": "px", "default": 18 },
+    { "type": "color", "id": "question_color", "label": "Question Color", "default": "#333333" },
+
+    { "type": "range", "id": "answer_size", "label": "Answer Font Size", "min": 12, "max": 28, "step": 1, "unit": "px", "default": 16 },
+    { "type": "color", "id": "answer_color", "label": "Answer Color", "default": "#555555" },
+
+    { "type": "text", "id": "faq_1_question", "label": "FAQ 1 Question" },
+    { "type": "textarea", "id": "faq_1_answer", "label": "FAQ 1 Answer" },
+
+    { "type": "text", "id": "faq_2_question", "label": "FAQ 2 Question" },
+    { "type": "textarea", "id": "faq_2_answer", "label": "FAQ 2 Answer" },
+
+    { "type": "text", "id": "faq_3_question", "label": "FAQ 3 Question" },
+    { "type": "textarea", "id": "faq_3_answer", "label": "FAQ 3 Answer" },
+
+    { "type": "text", "id": "faq_4_question", "label": "FAQ 4 Question" },
+    { "type": "textarea", "id": "faq_4_answer", "label": "FAQ 4 Answer" },
+
+    { "type": "text", "id": "faq_5_question", "label": "FAQ 5 Question" },
+    { "type": "textarea", "id": "faq_5_answer", "label": "FAQ 5 Answer" }
+  ]
+}
+{% endschema %}

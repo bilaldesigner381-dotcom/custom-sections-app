@@ -1,21 +1,25 @@
 {
-  "version": 2,
+  "version": 3,
   "builds": [
     {
       "src": "package.json",
-      "use": "@vercel/node",
+      "use": "@vercel/static-build",
       "config": {
-        "includeFiles": [
-          "prisma/schema.prisma",
-          "prisma/migrations/**"
-        ]
+        "distDir": "build/client",
+        "clean": false
       }
     }
   ],
   "routes": [
     {
+      "src": "/build/(.*)",
+      "dest": "/build/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/build/server/index.js"
     }
-  ]
+  ],
+  "installCommand": "npm install",
+  "buildCommand": "npm run vercel-build"
 }

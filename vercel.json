@@ -7,7 +7,7 @@
     }
   ],
   "installCommand": "npm install && npx prisma generate",
-  "buildCommand": "npm run build && npx prisma migrate deploy",
+  "buildCommand": "npm run vercel-build && npx prisma migrate deploy",
   "env": {
     "DATABASE_URL": "postgresql://neondb_owner:npg_fQuXA0JqIKT9@ep-delicate-dawn-adjphcc6-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
   }

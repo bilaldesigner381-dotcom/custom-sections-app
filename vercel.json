@@ -3,19 +3,15 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": [
-          "prisma/schema.prisma",
-          "prisma/migrations/**"
-        ]
-      }
+      "use": "@vercel/node"
     }
   ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/build/server/index.js"
-    }
-  ]
+  "installCommand": "npm install && npx prisma generate",
+  "buildCommand": "npm run build",
+  "env": {
+    "DATABASE_URL": "postgresql://neondb_owner:npg_fQuXA0JqIKT9@ep-delicate-dawn-adjphcc6-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+  }
 }
+
+
+

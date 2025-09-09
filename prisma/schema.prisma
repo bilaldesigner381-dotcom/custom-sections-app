@@ -28,6 +28,6 @@ model Session {
   collaborator  Boolean?  @default(false)
   emailVerified Boolean?  @default(false)
 
-  @@map("session") // 👈 Ensures table is lowercase `session` as Shopify expects
+  @@map("session")
 }
 

@@ -18,3 +18,5 @@ redirect_urls = ["https://custom-sections-app-v2.vercel.app/auth/callback"]
 api_version = "2023-10"
 
 [pos]
+embedded = true
+

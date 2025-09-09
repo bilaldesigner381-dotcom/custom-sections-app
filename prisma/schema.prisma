@@ -5,7 +5,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Ab SQLite ki jagah PostgreSQL use ho raha hai
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -28,4 +27,7 @@ model Session {
   locale        String?
   collaborator  Boolean?  @default(false)
   emailVerified Boolean?  @default(false)
+
+  @@map("session") // 👈 Ensures table is lowercase `session` as Shopify expects
 }
+

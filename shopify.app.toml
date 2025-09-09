@@ -1,9 +1,7 @@
-# shopify.app.toml
-
 name = "Section Master"
-handle = "section-master"
-client_id = "60d7693118c9254c1c2a595a8fc5d2e3"
-application_url = "https://will-viruses-surveillance-measures.trycloudflare.com"
+handle = "custom-sections-app-v2"
+client_id = "97158f85dddff262f2fced9d6321ecf7"
+application_url = "https://custom-sections-app-v2.vercel.app/"
 embedded = true
 
 [build]
@@ -14,11 +12,9 @@ dev_store_url = "nikshoes.myshopify.com"
 scopes = "read_products,write_products,read_themes,write_themes"
 
 [auth]
-redirect_urls = ["https://will-viruses-surveillance-measures.trycloudflare.com/auth/callback", "https://will-viruses-surveillance-measures.trycloudflare.com/auth/shopify/callback", "https://will-viruses-surveillance-measures.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://custom-sections-app-v2.vercel.app/auth/callback"]
 
 [webhooks]
 api_version = "2023-10"
 
 [pos]
-embedded = true
-

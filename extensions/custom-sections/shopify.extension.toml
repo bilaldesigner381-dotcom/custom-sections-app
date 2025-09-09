@@ -1,4 +1,7 @@
 name = "Section Master - Theme Sections"
+
+uid = "a9088e11-d680-6151-0869-b7bca3246a9ae6e25b4d"
+
 type = "theme"
 handle = "section-master"
 

@@ -1,8 +1,6 @@
-# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
-
 client_id = "97158f85dddff262f2fced9d6321ecf7"
 name = "Section Master"
-application_url = "https://custom-sections-app-v2.vercel.app/"
+application_url = "https://custom-sections-app-v2.vercel.app"
 embedded = true
 handle = "custom-sections-app-v2"
 
@@ -10,7 +8,6 @@ handle = "custom-sections-app-v2"
 api_version = "2023-10"
 
 [access_scopes]
-# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 scopes = "read_products,read_themes,write_products,write_themes"
 
 [auth]

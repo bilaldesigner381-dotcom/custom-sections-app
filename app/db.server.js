@@ -1,11 +1,14 @@
-import "@shopify/shopify-app-remix/adapters/node";
+import "@shopify/shopify-app-remix/adapters/node"; 
 import {
   ApiVersion,
   AppDistribution,
   shopifyApp,
 } from "@shopify/shopify-app-remix/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
-import prisma from "./db.server"; // ✅ This will now work correctly
+import { PrismaClient } from "@prisma/client";
+
+// ✅ Initialize Prisma client properly
+const prisma = new PrismaClient();
 
 // Database connection health check
 async function checkDatabaseConnection() {
@@ -31,8 +34,9 @@ if (!appUrl) {
   );
 }
 
-const formattedAppUrl = appUrl.startsWith('http') ? appUrl : `https://${appUrl}`;
+const formattedAppUrl = appUrl.startsWith("http") ? appUrl : `https://${appUrl}`;
 
+// Initialize Shopify app
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
   apiSecretKey: process.env.SHOPIFY_API_SECRET || "",
@@ -40,7 +44,9 @@ const shopify = shopifyApp({
   scopes: process.env.SCOPES?.split(","),
   appUrl: formattedAppUrl,
   authPathPrefix: "/auth",
-  sessionStorage: new PrismaSessionStorage(prisma),
+  sessionStorage: new PrismaSessionStorage(prisma, {
+    tableName: "session", // Must match @@map("session") in schema.prisma
+  }),
   distribution: AppDistribution.AppStore,
   future: {
     unstable_newEmbeddedAuthStrategy: true,
@@ -59,3 +65,6 @@ export const unauthenticated = shopify.unauthenticated;
 export const login = shopify.login;
 export const registerWebhooks = shopify.registerWebhooks;
 export const sessionStorage = shopify.sessionStorage;
+
+// ✅ Export Prisma client for other modules
+export { prisma };

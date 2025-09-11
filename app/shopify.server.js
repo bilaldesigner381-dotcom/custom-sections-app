@@ -7,12 +7,12 @@ import {
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import { PrismaClient } from "@prisma/client";
 
-// ✅ Proper Prisma client initialization for serverless environments
+// ✅ Initialize Prisma client with dev logging
 const prisma = new PrismaClient({
   log: process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
 });
 
-// ✅ Health check function for database connection
+// ✅ Health check for database connection
 async function checkDatabaseConnection() {
   try {
     await prisma.$connect();
@@ -24,31 +24,34 @@ async function checkDatabaseConnection() {
   }
 }
 
-// ✅ Initialize database connection on startup
+// Initialize connection on startup
 checkDatabaseConnection().catch(console.error);
 
-// App URL ko properly resolve karte hain
+// Resolve App URL
 const appUrl =
   process.env.SHOPIFY_APP_URL ||
-  process.env.VERCEL_URL || // ✅ Vercel specific environment variable
+  process.env.VERCEL_URL ||
   process.env.HOST ||
   (() => {
     throw new Error(
-      "❌ Missing SHOPIFY_APP_URL, VERCEL_URL or HOST environment variable. Please set it in Vercel project settings."
+      "❌ Missing SHOPIFY_APP_URL, VERCEL_URL or HOST environment variable."
     );
   })();
 
-// ✅ Add https:// prefix if missing (required for Vercel)
-const formattedAppUrl = appUrl.startsWith('http') ? appUrl : `https://${appUrl}`;
+// Ensure HTTPS prefix
+const formattedAppUrl = appUrl.startsWith("http") ? appUrl : `https://${appUrl}`;
 
+// ✅ Shopify App Initialization
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
   apiSecretKey: process.env.SHOPIFY_API_SECRET || "",
   apiVersion: ApiVersion.January25,
   scopes: process.env.SCOPES?.split(","),
-  appUrl: formattedAppUrl, // ✅ Now with proper https:// prefix
+  appUrl: formattedAppUrl,
   authPathPrefix: "/auth",
-  sessionStorage: new PrismaSessionStorage(prisma),
+  sessionStorage: new PrismaSessionStorage(prisma, {
+    tableName: "session", // ✅ Must match @@map("session") in schema.prisma
+  }),
   distribution: AppDistribution.AppStore,
   future: {
     unstable_newEmbeddedAuthStrategy: true,
@@ -59,6 +62,7 @@ const shopify = shopifyApp({
     : {}),
 });
 
+// ✅ Exports for Remix and Shopify routes
 export default shopify;
 export const apiVersion = ApiVersion.January25;
 export const addDocumentResponseHeaders = shopify.addDocumentResponseHeaders;
@@ -67,3 +71,6 @@ export const unauthenticated = shopify.unauthenticated;
 export const login = shopify.login;
 export const registerWebhooks = shopify.registerWebhooks;
 export const sessionStorage = shopify.sessionStorage;
+
+// ✅ Export Prisma client for use in other modules
+export { prisma };

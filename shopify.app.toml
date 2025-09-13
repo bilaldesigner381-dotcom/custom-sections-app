@@ -2,7 +2,7 @@
 
 client_id = "97158f85dddff262f2fced9d6321ecf7"
 name = "Section Master"
-application_url = "https://custom-sections-app-v2.vercel.app"
+application_url = "https://custom-sections-app-4hst.vercel.app/"
 embedded = true
 handle = "custom-sections-app-v2"
 
@@ -19,7 +19,6 @@ optional_scopes = [ ]
 use_legacy_install_flow = false
 
 [auth]
-redirect_urls = [ "https://custom-sections-app-v2.vercel.app/auth/callback" ]
-
+redirect_urls = [ "https://custom-sections-app-4hst.vercel.app/auth/callback" ]
 [pos]
 embedded = true

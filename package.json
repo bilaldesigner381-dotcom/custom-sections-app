@@ -1,8 +1,8 @@
 {
   "name": "section-master",
   "private": true,
-    "engines": {
-    "node": "22.x"  
+  "engines": {
+    "node": "22.x"
   },
   "scripts": {
     "postinstall": "prisma generate",
@@ -24,9 +24,6 @@
     "vite": "vite"
   },
   "type": "module",
-  "engines": {
-    "node": "18.x"
-  },
   "dependencies": {
     "@prisma/client": "^6.16.0",
     "@remix-run/dev": "^2.16.1",

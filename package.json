@@ -1,6 +1,9 @@
 {
   "name": "section-master",
   "private": true,
+    "engines": {
+    "node": "22.x"  
+  },
   "scripts": {
     "postinstall": "prisma generate",
     "build": "prisma generate && prisma migrate deploy && remix vite:build",

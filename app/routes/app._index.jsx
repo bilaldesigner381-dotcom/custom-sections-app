@@ -1,13 +1,36 @@
-import { TitleBar, useAppBridge } from "@shopify/app-bridge-react";
-import { Page, Layout, Card, Heading, TextContainer, Text, List, Link, Button, Banner, Badge, InlineStack, Box } from "@shopify/polaris";
 import { useEffect, useState } from "react";
+import { useAppBridge } from "@shopify/app-bridge-react";
+import { 
+  Page, 
+  Layout, 
+  Card, 
+  Heading, 
+  Text, 
+  List, 
+  Link, 
+  Button, 
+  Banner, 
+  Badge, 
+  InlineStack, 
+  Box,
+  TextContainer
+} from "@shopify/polaris";
+import { authenticate } from "../shopify.server";
+
+// Required loader function for authentication
+export const loader = async ({ request }) => {
+  await authenticate.admin(request);
+  return null;
+};
 
 export default function AppDashboard() {
   const app = useAppBridge();
   const [shopDomain, setShopDomain] = useState("");
 
   useEffect(() => {
-    setShopDomain(app.getState().shopDomain);
+    if (app && app.getState) {
+      setShopDomain(app.getState().shopDomain);
+    }
   }, [app]);
 
   return (
@@ -182,5 +205,14 @@ export default function AppDashboard() {
         </Layout.Section>
       </Layout>
     </Page>
+  );
+}
+
+// Add missing TitleBar component
+function TitleBar({ title }) {
+  return (
+    <div style={{ padding: '1rem 0', borderBottom: '1px solid #e1e3e5', marginBottom: '2rem' }}>
+      <Heading element="h1">{title}</Heading>
+    </div>
   );
 }

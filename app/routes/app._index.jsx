@@ -122,7 +122,6 @@ export default function AppDashboard() {
               </List>
             </div>
           </Card>
-          // Add this new card section after the "Theme Editor Instructions" card
 <Layout.Section>
   <Card title="💬 WhatsApp Sticky Button" sectioned>
     <Banner status="success">

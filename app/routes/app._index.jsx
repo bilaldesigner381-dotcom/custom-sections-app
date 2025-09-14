@@ -122,6 +122,46 @@ export default function AppDashboard() {
               </List>
             </div>
           </Card>
+          // Add this new card section after the "Theme Editor Instructions" card
+<Layout.Section>
+  <Card title="💬 WhatsApp Sticky Button" sectioned>
+    <Banner status="success">
+      <strong>New!</strong> Drive more conversions with our floating WhatsApp chat button!
+    </Banner>
+    
+    <div style={{ marginTop: '1.5rem' }}>
+      <Text variant="bodyMd" as="p">
+        Add a professional WhatsApp chat button that sticks to the bottom of your store:
+      </Text>
+      
+      <List type="number">
+        <List.Item>Go to <strong>Apps → Section Master</strong> in your Shopify admin</List.Item>
+        <List.Item>Click on <strong>App Embeds</strong> in the navigation</List.Item>
+        <List.Item>Find the <strong>WhatsApp Sticky Button</strong> section</List.Item>
+        <List.Item>Enter your WhatsApp number and customize the design</List.Item>
+        <List.Item>Click <strong>Save</strong> - the button will appear automatically!</List.Item>
+      </List>
+    </div>
+
+    <div style={{ 
+      marginTop: '2rem', 
+      padding: '1rem', 
+      backgroundColor: '#25D366', 
+      borderRadius: '8px',
+      color: 'white'
+    }}>
+      <Text variant="bodyMd" fontWeight="bold" as="p">
+        📈 Proven to increase conversions by up to 30%! Customers love instant WhatsApp support.
+      </Text>
+    </div>
+
+    <Box paddingBlockStart="4">
+      <Button primary url="/app/embeds">
+        Set Up WhatsApp Button
+      </Button>
+    </Box>
+  </Card>
+</Layout.Section>
         </Layout.Section>
 
         {/* Free vs Premium Sections */}

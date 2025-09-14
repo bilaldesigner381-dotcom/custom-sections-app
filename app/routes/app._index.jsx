@@ -1,328 +1,186 @@
-import { useEffect } from "react";
-import { useFetcher } from "@remix-run/react";
-import {
-  Page,
-  Layout,
-  Text,
-  Card,
-  Button,
-  BlockStack,
-  Box,
-  List,
-  Link,
-  InlineStack,
-} from "@shopify/polaris";
 import { TitleBar, useAppBridge } from "@shopify/app-bridge-react";
-import { authenticate } from "../shopify.server";
+import { Page, Layout, Card, Heading, TextContainer, Text, List, Link, Button, Banner, Badge, InlineStack, Box } from "@shopify/polaris";
+import { useEffect, useState } from "react";
 
-export const loader = async ({ request }) => {
-  await authenticate.admin(request);
-
-  return null;
-};
-
-export const action = async ({ request }) => {
-  const { admin } = await authenticate.admin(request);
-  const color = ["Red", "Orange", "Yellow", "Green"][
-    Math.floor(Math.random() * 4)
-  ];
-  const response = await admin.graphql(
-    `#graphql
-      mutation populateProduct($product: ProductCreateInput!) {
-        productCreate(product: $product) {
-          product {
-            id
-            title
-            handle
-            status
-            variants(first: 10) {
-              edges {
-                node {
-                  id
-                  price
-                  barcode
-                  createdAt
-                }
-              }
-            }
-          }
-        }
-      }`,
-    {
-      variables: {
-        product: {
-          title: `${color} Snowboard`,
-        },
-      },
-    },
-  );
-  const responseJson = await response.json();
-  const product = responseJson.data.productCreate.product;
-  const variantId = product.variants.edges[0].node.id;
-  const variantResponse = await admin.graphql(
-    `#graphql
-    mutation shopifyRemixTemplateUpdateVariant($productId: ID!, $variants: [ProductVariantsBulkInput!]!) {
-      productVariantsBulkUpdate(productId: $productId, variants: $variants) {
-        productVariants {
-          id
-          price
-          barcode
-          createdAt
-        }
-      }
-    }`,
-    {
-      variables: {
-        productId: product.id,
-        variants: [{ id: variantId, price: "100.00" }],
-      },
-    },
-  );
-  const variantResponseJson = await variantResponse.json();
-
-  return {
-    product: responseJson.data.productCreate.product,
-    variant: variantResponseJson.data.productVariantsBulkUpdate.productVariants,
-  };
-};
-
-export default function Index() {
-  const fetcher = useFetcher();
-  const shopify = useAppBridge();
-  const isLoading =
-    ["loading", "submitting"].includes(fetcher.state) &&
-    fetcher.formMethod === "POST";
-  const productId = fetcher.data?.product?.id.replace(
-    "gid://shopify/Product/",
-    "",
-  );
+export default function AppDashboard() {
+  const app = useAppBridge();
+  const [shopDomain, setShopDomain] = useState("");
 
   useEffect(() => {
-    if (productId) {
-      shopify.toast.show("Product created");
-    }
-  }, [productId, shopify]);
-  const generateProduct = () => fetcher.submit({}, { method: "POST" });
+    setShopDomain(app.getState().shopDomain);
+  }, [app]);
 
   return (
     <Page>
-      <TitleBar title="Remix app template">
-        <button variant="primary" onClick={generateProduct}>
-          Generate a product
-        </button>
-      </TitleBar>
-      <BlockStack gap="500">
-        <Layout>
-          <Layout.Section>
-            <Card>
-              <BlockStack gap="500">
-                <BlockStack gap="200">
-                  <Text as="h2" variant="headingMd">
-                    Congrats on creating a new Shopify app 🎉
-                  </Text>
-                  <Text variant="bodyMd" as="p">
-                    This embedded app template uses{" "}
-                    <Link
-                      url="https://shopify.dev/docs/apps/tools/app-bridge"
-                      target="_blank"
-                      removeUnderline
-                    >
-                      App Bridge
-                    </Link>{" "}
-                    interface examples like an{" "}
-                    <Link url="/app/additional" removeUnderline>
-                      additional page in the app nav
-                    </Link>
-                    , as well as an{" "}
-                    <Link
-                      url="https://shopify.dev/docs/api/admin-graphql"
-                      target="_blank"
-                      removeUnderline
-                    >
-                      Admin GraphQL
-                    </Link>{" "}
-                    mutation demo, to provide a starting point for app
-                    development.
-                  </Text>
-                </BlockStack>
-                <BlockStack gap="200">
-                  <Text as="h3" variant="headingMd">
-                    Get started with products
-                  </Text>
-                  <Text as="p" variant="bodyMd">
-                    Generate a product with GraphQL and get the JSON output for
-                    that product. Learn more about the{" "}
-                    <Link
-                      url="https://shopify.dev/docs/api/admin-graphql/latest/mutations/productCreate"
-                      target="_blank"
-                      removeUnderline
-                    >
-                      productCreate
-                    </Link>{" "}
-                    mutation in our API references.
-                  </Text>
-                </BlockStack>
-                <InlineStack gap="300">
-                  <Button loading={isLoading} onClick={generateProduct}>
-                    Generate a product
-                  </Button>
-                  {fetcher.data?.product && (
-                    <Button
-                      url={`shopify:admin/products/${productId}`}
-                      target="_blank"
-                      variant="plain"
-                    >
-                      View product
-                    </Button>
-                  )}
-                </InlineStack>
-                {fetcher.data?.product && (
-                  <>
-                    <Text as="h3" variant="headingMd">
-                      {" "}
-                      productCreate mutation
-                    </Text>
-                    <Box
-                      padding="400"
-                      background="bg-surface-active"
-                      borderWidth="025"
-                      borderRadius="200"
-                      borderColor="border"
-                      overflowX="scroll"
-                    >
-                      <pre style={{ margin: 0 }}>
-                        <code>
-                          {JSON.stringify(fetcher.data.product, null, 2)}
-                        </code>
-                      </pre>
-                    </Box>
-                    <Text as="h3" variant="headingMd">
-                      {" "}
-                      productVariantsBulkUpdate mutation
-                    </Text>
-                    <Box
-                      padding="400"
-                      background="bg-surface-active"
-                      borderWidth="025"
-                      borderRadius="200"
-                      borderColor="border"
-                      overflowX="scroll"
-                    >
-                      <pre style={{ margin: 0 }}>
-                        <code>
-                          {JSON.stringify(fetcher.data.variant, null, 2)}
-                        </code>
-                      </pre>
-                    </Box>
-                  </>
-                )}
-              </BlockStack>
-            </Card>
-          </Layout.Section>
-          <Layout.Section variant="oneThird">
-            <BlockStack gap="500">
-              <Card>
-                <BlockStack gap="200">
-                  <Text as="h2" variant="headingMd">
-                    App template specs
-                  </Text>
-                  <BlockStack gap="200">
-                    <InlineStack align="space-between">
-                      <Text as="span" variant="bodyMd">
-                        Framework
-                      </Text>
-                      <Link
-                        url="https://remix.run"
-                        target="_blank"
-                        removeUnderline
-                      >
-                        Remix
-                      </Link>
-                    </InlineStack>
-                    <InlineStack align="space-between">
-                      <Text as="span" variant="bodyMd">
-                        Database
-                      </Text>
-                      <Link
-                        url="https://www.prisma.io/"
-                        target="_blank"
-                        removeUnderline
-                      >
-                        Prisma
-                      </Link>
-                    </InlineStack>
-                    <InlineStack align="space-between">
-                      <Text as="span" variant="bodyMd">
-                        Interface
-                      </Text>
-                      <span>
-                        <Link
-                          url="https://polaris.shopify.com"
-                          target="_blank"
-                          removeUnderline
-                        >
-                          Polaris
-                        </Link>
-                        {", "}
-                        <Link
-                          url="https://shopify.dev/docs/apps/tools/app-bridge"
-                          target="_blank"
-                          removeUnderline
-                        >
-                          App Bridge
-                        </Link>
-                      </span>
-                    </InlineStack>
-                    <InlineStack align="space-between">
-                      <Text as="span" variant="bodyMd">
-                        API
-                      </Text>
-                      <Link
-                        url="https://shopify.dev/docs/api/admin-graphql"
-                        target="_blank"
-                        removeUnderline
-                      >
-                        GraphQL API
-                      </Link>
-                    </InlineStack>
-                  </BlockStack>
-                </BlockStack>
-              </Card>
-              <Card>
-                <BlockStack gap="200">
-                  <Text as="h2" variant="headingMd">
-                    Next steps
-                  </Text>
+      <TitleBar title="Section Master" />
+      
+      <Layout>
+        {/* Welcome Section */}
+        <Layout.Section>
+          <Card sectioned>
+            <InlineStack align="space-between" blockAlign="center">
+              <Heading>🎉 Welcome to Section Master!</Heading>
+              <Badge tone="success">Free Plan Active</Badge>
+            </InlineStack>
+            <TextContainer>
+              <Text variant="bodyMd" as="p">
+                Access <strong>3 free sections</strong> instantly! Upgrade to unlock all <strong>15 premium sections</strong> for just $9/month.
+              </Text>
+            </TextContainer>
+          </Card>
+        </Layout.Section>
+
+        {/* Pricing & Features */}
+        <Layout.Section>
+          <Card title="💰 Pricing Plans" sectioned>
+            <Layout>
+              <Layout.Section oneHalf>
+                <Box padding="4" background="bg-surface-secondary" borderRadius="2">
+                  <Heading>Free Plan</Heading>
+                  <Text variant="headingXl" as="h2">$0</Text>
+                  <Text variant="bodyMd" tone="subdued">forever</Text>
+                  
                   <List>
-                    <List.Item>
-                      Build an{" "}
-                      <Link
-                        url="https://shopify.dev/docs/apps/getting-started/build-app-example"
-                        target="_blank"
-                        removeUnderline
-                      >
-                        {" "}
-                        example app
-                      </Link>{" "}
-                      to get started
-                    </List.Item>
-                    <List.Item>
-                      Explore Shopify’s API with{" "}
-                      <Link
-                        url="https://shopify.dev/docs/apps/tools/graphiql-admin-api"
-                        target="_blank"
-                        removeUnderline
-                      >
-                        GraphiQL
-                      </Link>
-                    </List.Item>
+                    <List.Item>✅ 3 Basic Sections</List.Item>
+                    <List.Item>✅ Standard Support</List.Item>
+                    <List.Item>❌ Premium Sections</List.Item>
+                    <List.Item>❌ Priority Support</List.Item>
                   </List>
-                </BlockStack>
-              </Card>
-            </BlockStack>
-          </Layout.Section>
-        </Layout>
-      </BlockStack>
+                  
+                  <Box paddingBlockStart="4">
+                    <Button fullWidth disabled>
+                      Current Plan
+                    </Button>
+                  </Box>
+                </Box>
+              </Layout.Section>
+              
+              <Layout.Section oneHalf>
+                <Box padding="4" background="bg-surface-success" borderRadius="2">
+                  <Heading>Pro Plan</Heading>
+                  <Text variant="headingXl" as="h2">$9</Text>
+                  <Text variant="bodyMd" tone="subdued">per month</Text>
+                  
+                  <List>
+                    <List.Item>✅ All 15 Premium Sections</List.Item>
+                    <List.Item>✅ Priority Support</List.Item>
+                    <List.Item>✅ Regular Updates</List.Item>
+                    <List.Item>✅ Custom Requests</List.Item>
+                  </List>
+                  
+                  <Box paddingBlockStart="4">
+                    <Button primary fullWidth url="/app/upgrade">
+                      Upgrade Now
+                    </Button>
+                  </Box>
+                </Box>
+              </Layout.Section>
+            </Layout>
+          </Card>
+        </Layout.Section>
+
+        {/* Theme Editor Instructions */}
+        <Layout.Section>
+          <Card title="🎨 How to Add Sections" sectioned>
+            <Banner status="info">
+              All sections appear in your Shopify theme editor under <strong>Apps → Section Master</strong>
+            </Banner>
+            
+            <div style={{ marginTop: '1.5rem' }}>
+              <List type="number">
+                <List.Item>Go to <strong>Online Store → Themes</strong></List.Item>
+                <List.Item>Click <strong>Customize</strong> on your theme</List.Item>
+                <List.Item>Click <strong>Add section → Apps</strong></List.Item>
+                <List.Item>Choose <strong>Section Master</strong></List.Item>
+                <List.Item>Select any section and customize!</List.Item>
+              </List>
+            </div>
+          </Card>
+        </Layout.Section>
+
+        {/* Free vs Premium Sections */}
+        <Layout.Section>
+          <Card title="📦 Available Sections" sectioned>
+            <Layout>
+              <Layout.Section oneHalf>
+                <Heading>Free Sections</Heading>
+                <List>
+                  <List.Item>1. Hero Banner</List.Item>
+                  <List.Item>2. Feature Grid</List.Item>
+                  <List.Item>3. Testimonials</List.Item>
+                </List>
+                <Box padding="2">
+                  <Button url="/app/sections?plan=free">Use Free Sections</Button>
+                </Box>
+              </Layout.Section>
+              
+              <Layout.Section oneHalf>
+                <Heading>
+                  Premium Sections 
+                  <Badge tone="new">$9/month</Badge>
+                </Heading>
+                <List>
+                  <List.Item>4. Product Carousel</List.Item>
+                  <List.Item>5. Countdown Timer</List.Item>
+                  <List.Item>6. Video Hero</List.Item>
+                  <List.Item>7. Advanced FAQ</List.Item>
+                  <List.Item>8. Interactive Quiz</List.Item>
+                  <List.Item>9. Lookbook Gallery</List.Item>
+                  <List.Item>10. Newsletter Signup</List.Item>
+                  <List.Item>11. Advanced Filters</List.Item>
+                  <List.Item>12. Size Guide</List.Item>
+                  <List.Item>13. Store Locator</List.Item>
+                  <List.Item>14. Social Feed</List.Item>
+                  <List.Item>15. Advanced Reviews</List.Item>
+                </List>
+                <Box padding="2">
+                  <Button primary url="/app/upgrade">
+                    Unlock All Sections
+                  </Button>
+                </Box>
+              </Layout.Section>
+            </Layout>
+          </Card>
+        </Layout.Section>
+
+        {/* Quick Actions */}
+        <Layout.Section secondary>
+          <Card title="⚡ Quick Start" sectioned>
+            <List>
+              <List.Item>
+                <Link url="/app/sections?plan=free" removeUnderline>
+                  <Button fullWidth>Use Free Sections</Button>
+                </Link>
+              </List.Item>
+              <List.Item>
+                <Link url="/app/templates" removeUnderline>
+                  <Button fullWidth>View Templates</Button>
+                </Link>
+              </List.Item>
+              <List.Item>
+                <Link url="/app/upgrade" removeUnderline>
+                  <Button fullWidth primary>
+                    Upgrade to Pro - $9/month
+                  </Button>
+                </Link>
+              </List.Item>
+            </List>
+          </Card>
+
+          <Card title="💬 Support" sectioned>
+            <TextContainer>
+              <Text variant="bodyMd" as="p">
+                Need help or have questions about upgrading?
+              </Text>
+              <div style={{ marginTop: '1rem' }}>
+                <Button url="/app/support" outline>
+                  Contact Support
+                </Button>
+              </div>
+            </TextContainer>
+          </Card>
+        </Layout.Section>
+      </Layout>
     </Page>
   );
 }

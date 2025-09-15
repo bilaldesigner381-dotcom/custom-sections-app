@@ -11,11 +11,10 @@ import {
   Badge, 
   InlineStack,
   Box,
-  Thumbnail,
   List,
   Icon
 } from "@shopify/polaris";
-import { LockFilled } from '@shopify/polaris-icons';
+import { LockIcon } from "@shopify/polaris-icons"; // FIXED: Using LockIcon instead of LockFilled
 import { authenticate } from "../shopify.server";
 
 // Required loader function
@@ -147,7 +146,7 @@ export default function SectionsManager() {
                         fullWidth 
                         primary 
                         url="/app/upgrade"
-                        icon={LockFilled}
+                        icon={LockIcon} // FIXED: Using LockIcon
                       >
                         Upgrade to Unlock
                       </Button>

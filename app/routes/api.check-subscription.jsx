@@ -1,4 +1,4 @@
-// app/routes/api.check-subscription.jsx - ENHANCED VERSION
+// app/routes/api.check-subscription.jsx - FIXED
 import { json } from "@remix-run/node";
 import { authenticate } from "../shopify.server";
 import { PrismaClient } from "@prisma/client";
@@ -25,9 +25,11 @@ export async function loader({ request }) {
       where: { shop: session.shop },
       select: { 
         status: true,
-        discountCode: true,
-        discountPercentage: true,
-        createdAt: true
+        discountCode: true,        // Now this field exists
+        discountPercentage: true,  // Now this field exists
+        createdAt: true,
+        plan: true,                // Added for completeness
+        chargeId: true             // Added for potential future use
       }
     });
 
@@ -50,6 +52,6 @@ export async function loader({ request }) {
       hasActiveSubscription: false,
       subscription: null,
       error: 'Failed to check subscription status'
-    });
+    }, { status: 500 });
   }
 }

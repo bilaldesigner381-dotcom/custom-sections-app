@@ -1,4 +1,4 @@
-// app/routes/api.create-charge.jsx - FIXED VERSION
+// app/routes/api.create-charge.jsx - FIXED
 import { json } from "@remix-run/node";
 import { authenticate } from "../shopify.server";
 import { PrismaClient } from "@prisma/client";
@@ -6,14 +6,14 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export async function action({ request }) {
-  const { admin, session } = await authenticate.admin(request);
-  
-  // Read form data for discounts
-  const formData = await request.formData();
-  const discountCode = formData.get('discountCode');
-  const discountPercentage = formData.get('discountPercentage');
-
   try {
+    const { admin, session } = await authenticate.admin(request);
+    
+    // Read form data for discounts
+    const formData = await request.formData();
+    const discountCode = formData.get('discountCode');
+    const discountPercentage = formData.get('discountPercentage');
+
     // Check if already subscribed
     const existingSub = await prisma.subscription.findUnique({
       where: { shop: session.shop }
@@ -31,18 +31,49 @@ export async function action({ request }) {
       finalPrice = 9.00 * (1 - parseFloat(discountPercentage) / 100);
     }
 
-    // Create recurring charge
-    const charge = new admin.rest.resources.RecurringApplicationCharge({
-      session: admin.session,
+    // FIXED: Use correct Shopify Admin API syntax
+    const chargeData = {
+      name: "Section Master Pro Plan",
+      price: finalPrice,
+      return_url: `${process.env.SHOPIFY_APP_URL}/app/upgrade/success`,
+      test: process.env.NODE_ENV === 'development', // Test in dev
+      trial_days: 0,
+      capped_amount: null,
+      terms: null
+    };
+
+    // Create recurring charge using GraphQL
+    const response = await admin.graphql(`
+      mutation CreateRecurringCharge($charge: RecurringApplicationChargeInput!) {
+        recurringApplicationChargeCreate(recurringApplicationCharge: $charge) {
+          recurringApplicationCharge {
+            id
+            confirmationUrl
+            name
+            price
+            status
+            test
+          }
+          userErrors {
+            field
+            message
+          }
+        }
+      }
+    `, {
+      variables: {
+        charge: chargeData
+      }
     });
 
-    charge.name = "Section Master Pro Plan";
-    charge.price = finalPrice; // Use dynamic price
-    charge.return_url = `${process.env.SHOPIFY_APP_URL}/app/upgrade/success`;
-    charge.test = process.env.NODE_ENV === 'development';
-    charge.trial_days = 0;
+    const responseData = await response.json();
+    
+    if (responseData.errors || responseData.data.recurringApplicationChargeCreate.userErrors.length > 0) {
+      const errors = responseData.errors || responseData.data.recurringApplicationChargeCreate.userErrors;
+      throw new Error(`Shopify API error: ${JSON.stringify(errors)}`);
+    }
 
-    await charge.save();
+    const charge = responseData.data.recurringApplicationChargeCreate.recurringApplicationCharge;
 
     // Save pending subscription with discount info
     await prisma.subscription.upsert({
@@ -56,6 +87,7 @@ export async function action({ request }) {
       create: {
         shop: session.shop,
         chargeId: charge.id,
+        plan: "pro",
         status: "pending",
         discountCode: discountCode || null,
         discountPercentage: discountPercentage ? parseFloat(discountPercentage) : null
@@ -63,14 +95,17 @@ export async function action({ request }) {
     });
 
     return json({ 
-      confirmationUrl: charge.confirmation_url,
+      confirmationUrl: charge.confirmationUrl,
       originalPrice: 9.00,
       discountedPrice: finalPrice,
       discountApplied: !!discountPercentage
     });
 
   } catch (error) {
-    console.error("Billing error:", error);
-    return json({ error: "Payment setup failed" }, { status: 500 });
+    console.error("Billing error details:", error);
+    return json({ 
+      error: "Payment setup failed. Please try again or contact support.",
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    }, { status: 500 });
   }
 }

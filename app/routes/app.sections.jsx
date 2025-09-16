@@ -1,4 +1,4 @@
-// app/routes/app.sections.jsx - FIXED VERSION
+// app/routes/app.sections.jsx
 import { useState, useEffect } from "react";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { 
@@ -11,8 +11,6 @@ import {
   Badge, 
   InlineStack,
   Box,
-  List,
-  Icon,
   Thumbnail,
   Spinner
 } from "@shopify/polaris";
@@ -31,6 +29,7 @@ export default function SectionsManager() {
   const [sections, setSections] = useState([]);
   const [hasPremium, setHasPremium] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchSections();
@@ -38,12 +37,22 @@ export default function SectionsManager() {
 
   const fetchSections = async () => {
     try {
+      setIsLoading(true);
+      setError(null);
+      
       const response = await fetch('/api/sections');
+      
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      
       const data = await response.json();
-      setSections(data.sections);
-      setHasPremium(data.hasPremium);
+      setSections(data.sections || []);
+      setHasPremium(data.hasPremium || false);
+      
     } catch (error) {
       console.error('Failed to fetch sections:', error);
+      setError('Failed to load sections. Please try again.');
       app.toast.show('Failed to load sections');
     } finally {
       setIsLoading(false);
@@ -59,14 +68,18 @@ export default function SectionsManager() {
 
   const handleAddSection = async (section) => {
     try {
-      // TODO: Implement actual section installation API
       console.log('Adding section:', section.name);
+      
+      // Show immediate feedback
       app.toast.show(`"${section.displayName}" added successfully!`);
       
-      // Refresh sections after adding
-      fetchSections();
+      // TODO: Implement actual section installation API
+      // For now, we'll just refresh the sections list
+      await fetchSections();
+      
     } catch (error) {
-      app.toast.show('Failed to add section');
+      console.error('Failed to add section:', error);
+      app.toast.show('Failed to add section. Please try again.');
     }
   };
 
@@ -83,12 +96,27 @@ export default function SectionsManager() {
     );
   }
 
+  if (error) {
+    return (
+      <Page>
+        <Box padding="6">
+          <Banner tone="critical">
+            <Text variant="bodyMd">{error}</Text>
+          </Banner>
+          <Box paddingBlockStart="4">
+            <Button onClick={fetchSections}>Try Again</Button>
+          </Box>
+        </Box>
+      </Page>
+    );
+  }
+
   return (
     <Page>
       <div style={{ padding: '1rem 0', marginBottom: '2rem' }}>
         <Text variant="heading2xl" as="h1">Section Gallery</Text>
         <Text variant="bodyMd" tone="subdued">
-          {hasPremium ? 'You have access to all 15 premium sections!' : 'Choose from 15 amazing sections'}
+          {hasPremium ? 'You have access to all premium sections!' : `Choose from ${sections.length} amazing sections`}
         </Text>
       </div>
 
@@ -97,13 +125,27 @@ export default function SectionsManager() {
         <Layout.Section>
           <Card>
             <InlineStack gap="4" blockAlign="center">
-              <Button pressed={filter === 'all'} onClick={() => setFilter('all')}>
+              <Button 
+                pressed={filter === 'all'} 
+                onClick={() => setFilter('all')}
+                size="medium"
+              >
                 All Sections ({sections.length})
               </Button>
-              <Button pressed={filter === 'free'} onClick={() => setFilter('free')} tone="success">
+              <Button 
+                pressed={filter === 'free'} 
+                onClick={() => setFilter('free')} 
+                tone="success"
+                size="medium"
+              >
                 Free Sections ({sections.filter(s => s.isFree).length})
               </Button>
-              <Button pressed={filter === 'paid'} onClick={() => setFilter('paid')} tone="attention">
+              <Button 
+                pressed={filter === 'paid'} 
+                onClick={() => setFilter('paid')} 
+                tone="attention"
+                size="medium"
+              >
                 Premium Sections ({sections.filter(s => !s.isFree).length})
               </Button>
             </InlineStack>
@@ -114,91 +156,105 @@ export default function SectionsManager() {
       {/* Sections Grid */}
       <Layout>
         <Layout.Section>
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
-            gap: '2rem',
-            marginTop: '2rem'
-          }}>
-            {filteredSections.map((section) => (
-              <Card key={section.name}>
-                <Box padding="4">
-                  {/* Section Thumbnail */}
-                  <Thumbnail
-                    source={section.thumbnail}
-                    alt={section.displayName}
-                    size="large"
-                    style={{ 
-                      width: '100%', 
-                      height: '200px', 
-                      objectFit: 'cover',
-                      borderRadius: '8px'
-                    }}
-                  />
+          {filteredSections.length === 0 ? (
+            <Card>
+              <Box padding="6" textAlign="center">
+                <Text variant="bodyMd" tone="subdued">
+                  No sections found. {filter === 'paid' && !hasPremium ? 'Upgrade to access premium sections.' : 'Try refreshing the page.'}
+                </Text>
+              </Box>
+            </Card>
+          ) : (
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
+              gap: '2rem',
+              marginTop: '2rem'
+            }}>
+              {filteredSections.map((section) => (
+                <Card key={section.name}>
+                  <Box padding="4">
+                    {/* Section Thumbnail */}
+                    <Thumbnail
+                      source={section.thumbnail || "https://via.placeholder.com/300x200/e1e3e5/637381?text=No+Image"}
+                      alt={section.displayName}
+                      size="large"
+                      style={{ 
+                        width: '100%', 
+                        height: '200px', 
+                        objectFit: 'cover',
+                        borderRadius: '8px',
+                        cursor: 'pointer'
+                      }}
+                      onClick={() => setPreviewSection(section)}
+                    />
 
-                  {/* Section Info */}
-                  <Box paddingBlockStart="4">
-                    <InlineStack align="space-between" blockAlign="center">
-                      <Text variant="headingMd" as="h3" fontWeight="bold">
-                        {section.displayName}
+                    {/* Section Info */}
+                    <Box paddingBlockStart="4">
+                      <InlineStack align="space-between" blockAlign="center">
+                        <Text variant="headingMd" as="h3" fontWeight="bold">
+                          {section.displayName}
+                        </Text>
+                        {section.isFree ? (
+                          <Badge tone="success">FREE</Badge>
+                        ) : (
+                          <Badge tone="new">PREMIUM</Badge>
+                        )}
+                      </InlineStack>
+
+                      {section.category && (
+                        <Text variant="bodySm" tone="subdued" as="p">
+                          {section.category}
+                        </Text>
+                      )}
+
+                      <Text variant="bodyMd" as="p" style={{ marginTop: '0.5rem', minHeight: '40px' }}>
+                        {section.description}
                       </Text>
-                      {section.isFree ? (
-                        <Badge tone="success">FREE</Badge>
-                      ) : (
-                        <Badge tone="new">PREMIUM</Badge>
-                      )}
-                    </InlineStack>
+                    </Box>
 
-                    <Text variant="bodySm" tone="subdued" as="p">
-                      {section.category}
-                    </Text>
-
-                    <Text variant="bodyMd" as="p" style={{ marginTop: '0.5rem' }}>
-                      {section.description}
-                    </Text>
-                  </Box>
-
-                  {/* Action Buttons */}
-                  <Box paddingBlockStart="4">
-                    <InlineStack gap="2" blockAlign="center">
-                      {section.isFree || hasPremium ? (
+                    {/* Action Buttons */}
+                    <Box paddingBlockStart="4">
+                      <InlineStack gap="2" blockAlign="center">
+                        {section.isFree || hasPremium ? (
+                          <Button 
+                            fullWidth 
+                            primary 
+                            onClick={() => handleAddSection(section)}
+                            icon={PlusIcon}
+                          >
+                            Add to Store
+                          </Button>
+                        ) : (
+                          <Button 
+                            fullWidth 
+                            primary 
+                            url="/app/upgrade"
+                            icon={LockIcon}
+                          >
+                            Upgrade to Unlock
+                          </Button>
+                        )}
+                        
                         <Button 
-                          fullWidth 
-                          primary 
-                          onClick={() => handleAddSection(section)}
-                          icon={PlusIcon}
+                          variant="plain" 
+                          onClick={() => setPreviewSection(section)}
+                          icon={PlayIcon}
+                          size="large"
                         >
-                          Add to Store
+                          Preview
                         </Button>
-                      ) : (
-                        <Button 
-                          fullWidth 
-                          primary 
-                          url="/app/upgrade"
-                          icon={LockIcon}
-                        >
-                          Upgrade to Unlock
-                        </Button>
-                      )}
-                      
-                      <Button 
-                        variant="plain" 
-                        onClick={() => setPreviewSection(section)}
-                        icon={PlayIcon}
-                        size="large"
-                      >
-                        Preview
-                      </Button>
-                    </InlineStack>
+                      </InlineStack>
+                    </Box>
                   </Box>
-                </Box>
-              </Card>
-            ))}
-          </div>
+                </Card>
+              ))}
+            </div>
+          )}
         </Layout.Section>
 
         {/* Upgrade Banner - Only show if not premium */}
-        {!hasPremium && filter === 'paid' && (
+        {!hasPremium && filter === 'paid' && filteredSections.length > 0 && (
           <Layout.Section>
             <Banner
               title="Unlock Premium Sections"
@@ -223,17 +279,34 @@ export default function SectionsManager() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          zIndex: 1000
+          zIndex: 1000,
+          padding: '1rem'
         }}>
           <Card>
             <Box padding="4">
-              <Text variant="headingXl">Preview: {previewSection.displayName}</Text>
+              <Text variant="headingXl" as="h2">Preview: {previewSection.displayName}</Text>
+              
               <img 
-                src={previewSection.thumbnail} 
+                src={previewSection.thumbnail || "https://via.placeholder.com/300x200/e1e3e5/637381?text=No+Image"} 
                 alt={previewSection.displayName}
-                style={{ width: '300px', borderRadius: '8px', margin: '1rem 0' }}
+                style={{ 
+                  width: '100%', 
+                  maxWidth: '400px', 
+                  borderRadius: '8px', 
+                  margin: '1rem 0' 
+                }}
               />
-              <Text variant="bodyMd">{previewSection.description}</Text>
+              
+              <Text variant="bodyMd" as="p">
+                {previewSection.description}
+              </Text>
+              
+              {previewSection.category && (
+                <Text variant="bodySm" tone="subdued" as="p">
+                  Category: {previewSection.category}
+                </Text>
+              )}
+              
               <Box paddingBlockStart="4">
                 <Button onClick={() => setPreviewSection(null)}>Close Preview</Button>
               </Box>

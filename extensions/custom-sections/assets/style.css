@@ -1,0 +1,40 @@
+/* extensions/custom-sections/assets/style.css */
+/* Hide paid sections for non-premium users */
+body:not(.premium-user) [data-section-name="announcement-countdown"],
+body:not(.premium-user) [data-section-name="featured-collection"],
+body:not(.premium-user) [data-section-name="featured-product"],
+body:not(.premium-user) [data-section-name="hero-banner"],
+body:not(.premium-user) [data-section-name="newsletter-signup"], 
+body:not(.premium-user) [data-section-name="instagram-gallery"],
+body:not(.premium-user) [data-section-name="hero-banner-slider"],
+body:not(.premium-user) [data-section-name="logo-carousel"],
+body:not(.premium-user) [data-section-name="services-features"],
+body:not(.premium-user) [data-section-name="video-section"],
+body:not(.premium-user) [data-section-name="blog-highlights"],
+body:not(.premium-user) [data-section-name="contact-map"] {
+  display: none !important;
+}
+
+/* Show all sections for premium users */
+body.premium-user [data-section-name] {
+  display: block !important;
+}
+
+/* Style for your app sections */
+.section-master-section {
+  border: 1px solid #e1e3e5;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background: white;
+}
+
+.section-master-section h4 {
+  margin: 0 0 8px 0;
+  color: #202223;
+}
+
+.section-master-section p {
+  margin: 0;
+  color: #6d7175;
+}

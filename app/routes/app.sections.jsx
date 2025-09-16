@@ -1,5 +1,5 @@
-// app/routes/app.sections.jsx
-import { useState } from "react";
+// app/routes/app.sections.jsx - FIXED VERSION
+import { useState, useEffect } from "react";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { 
   Page, 
@@ -13,96 +13,83 @@ import {
   Box,
   List,
   Icon,
-  Thumbnail
+  Thumbnail,
+  Spinner
 } from "@shopify/polaris";
 import { LockIcon, PlayIcon, PlusIcon } from "@shopify/polaris-icons";
 import { authenticate } from "../shopify.server";
 
-// Required loader function
 export const loader = async ({ request }) => {
   await authenticate.admin(request);
   return null;
 };
 
-// Section data with proper thumbnails (using placeholder images for now)
-const SECTIONS = [
-  // FREE SECTIONS
-  { 
-    id: 1, 
-    name: "Sticky WhatsApp Button", 
-    free: true, 
-    description: "Fixed WhatsApp button for customer support", 
-    thumbnail: "https://via.placeholder.com/300x200/00E676/ffffff?text=WhatsApp+Button",
-    category: "Conversion"
-  },
-  { 
-    id: 2, 
-    name: "Testimonials", 
-    free: true, 
-    description: "Display customer reviews and testimonials", 
-    thumbnail: "https://via.placeholder.com/300x200/FF6B35/ffffff?text=Testimonials",
-    category: "Social Proof"
-  },
-  { 
-    id: 3, 
-    name: "FAQ Section", 
-    free: true, 
-    description: "Frequently asked questions with toggle", 
-    thumbnail: "https://via.placeholder.com/300x200/5C6AC4/ffffff?text=FAQ+Section",
-    category: "Support"
-  },
-  
-  // PAID SECTIONS
-  { 
-    id: 4, 
-    name: "Countdown Timer", 
-    free: false, 
-    description: "Create urgency with time-limited offers", 
-    thumbnail: "https://via.placeholder.com/300x200/FF0000/ffffff?text=Countdown+Timer",
-    category: "Conversion"
-  },
-  { 
-    id: 5, 
-    name: "Featured Collection", 
-    free: false, 
-    description: "Showcase your best collections", 
-    thumbnail: "https://via.placeholder.com/300x200/47C1BF/ffffff?text=Collections",
-    category: "Products"
-  },
-  // ... Add all other sections with similar structure
-];
-
 export default function SectionsManager() {
   const app = useAppBridge();
   const [filter, setFilter] = useState('all');
   const [previewSection, setPreviewSection] = useState(null);
+  const [sections, setSections] = useState([]);
+  const [hasPremium, setHasPremium] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const filteredSections = SECTIONS.filter(section => {
+  useEffect(() => {
+    fetchSections();
+  }, []);
+
+  const fetchSections = async () => {
+    try {
+      const response = await fetch('/api/sections');
+      const data = await response.json();
+      setSections(data.sections);
+      setHasPremium(data.hasPremium);
+    } catch (error) {
+      console.error('Failed to fetch sections:', error);
+      app.toast.show('Failed to load sections');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const filteredSections = sections.filter(section => {
     if (filter === 'all') return true;
-    if (filter === 'free') return section.free;
-    if (filter === 'paid') return !section.free;
+    if (filter === 'free') return section.isFree;
+    if (filter === 'paid') return !section.isFree;
     return true;
   });
 
-  // Function to handle adding section to store
-  const handleAddSection = (sectionId) => {
-    console.log(`Adding section ${sectionId} to store`);
-    // TODO: Implement actual section addition logic
-    app.toast.show("Section added successfully!");
+  const handleAddSection = async (section) => {
+    try {
+      // TODO: Implement actual section installation API
+      console.log('Adding section:', section.name);
+      app.toast.show(`"${section.displayName}" added successfully!`);
+      
+      // Refresh sections after adding
+      fetchSections();
+    } catch (error) {
+      app.toast.show('Failed to add section');
+    }
   };
 
-  // Function to handle preview
-  const handlePreview = (section) => {
-    setPreviewSection(section);
-    console.log("Previewing section:", section.name);
-    // TODO: Implement actual preview modal
-  };
+  if (isLoading) {
+    return (
+      <Page>
+        <Box padding="6" display="flex" alignItems="center" justifyContent="center">
+          <Spinner size="large" />
+          <Box paddingInlineStart="4">
+            <Text variant="bodyMd">Loading sections...</Text>
+          </Box>
+        </Box>
+      </Page>
+    );
+  }
 
   return (
     <Page>
       <div style={{ padding: '1rem 0', marginBottom: '2rem' }}>
         <Text variant="heading2xl" as="h1">Section Gallery</Text>
-        <Text variant="bodyMd" tone="subdued">Choose from 15 amazing sections to enhance your store</Text>
+        <Text variant="bodyMd" tone="subdued">
+          {hasPremium ? 'You have access to all 15 premium sections!' : 'Choose from 15 amazing sections'}
+        </Text>
       </div>
 
       {/* Filter Tabs */}
@@ -111,13 +98,13 @@ export default function SectionsManager() {
           <Card>
             <InlineStack gap="4" blockAlign="center">
               <Button pressed={filter === 'all'} onClick={() => setFilter('all')}>
-                All Sections (15)
+                All Sections ({sections.length})
               </Button>
               <Button pressed={filter === 'free'} onClick={() => setFilter('free')} tone="success">
-                Free Sections (3)
+                Free Sections ({sections.filter(s => s.isFree).length})
               </Button>
               <Button pressed={filter === 'paid'} onClick={() => setFilter('paid')} tone="attention">
-                Premium Sections (12)
+                Premium Sections ({sections.filter(s => !s.isFree).length})
               </Button>
             </InlineStack>
           </Card>
@@ -134,12 +121,12 @@ export default function SectionsManager() {
             marginTop: '2rem'
           }}>
             {filteredSections.map((section) => (
-              <Card key={section.id}>
+              <Card key={section.name}>
                 <Box padding="4">
                   {/* Section Thumbnail */}
                   <Thumbnail
                     source={section.thumbnail}
-                    alt={section.name}
+                    alt={section.displayName}
                     size="large"
                     style={{ 
                       width: '100%', 
@@ -152,8 +139,10 @@ export default function SectionsManager() {
                   {/* Section Info */}
                   <Box paddingBlockStart="4">
                     <InlineStack align="space-between" blockAlign="center">
-                      <Text variant="headingMd" as="h3" fontWeight="bold">{section.name}</Text>
-                      {section.free ? (
+                      <Text variant="headingMd" as="h3" fontWeight="bold">
+                        {section.displayName}
+                      </Text>
+                      {section.isFree ? (
                         <Badge tone="success">FREE</Badge>
                       ) : (
                         <Badge tone="new">PREMIUM</Badge>
@@ -172,11 +161,11 @@ export default function SectionsManager() {
                   {/* Action Buttons */}
                   <Box paddingBlockStart="4">
                     <InlineStack gap="2" blockAlign="center">
-                      {section.free ? (
+                      {section.isFree || hasPremium ? (
                         <Button 
                           fullWidth 
                           primary 
-                          onClick={() => handleAddSection(section.id)}
+                          onClick={() => handleAddSection(section)}
                           icon={PlusIcon}
                         >
                           Add to Store
@@ -194,7 +183,7 @@ export default function SectionsManager() {
                       
                       <Button 
                         variant="plain" 
-                        onClick={() => handlePreview(section)}
+                        onClick={() => setPreviewSection(section)}
                         icon={PlayIcon}
                         size="large"
                       >
@@ -208,21 +197,21 @@ export default function SectionsManager() {
           </div>
         </Layout.Section>
 
-        {/* Upgrade Banner */}
-        {filter === 'paid' && (
+        {/* Upgrade Banner - Only show if not premium */}
+        {!hasPremium && filter === 'paid' && (
           <Layout.Section>
             <Banner
-              title="Unlock 12 Premium Sections"
+              title="Unlock Premium Sections"
               tone="info"
               action={{ content: 'Upgrade Now - $9/month', url: '/app/upgrade' }}
             >
-              Get access to countdown timers, Instagram galleries, video sections, and more!
+              Get access to {sections.filter(s => !s.isFree).length} premium sections including countdown timers, Instagram galleries, and more!
             </Banner>
           </Layout.Section>
         )}
       </Layout>
 
-      {/* Preview Modal (to be implemented) */}
+      {/* Preview Modal */}
       {previewSection && (
         <div style={{
           position: 'fixed',
@@ -238,8 +227,13 @@ export default function SectionsManager() {
         }}>
           <Card>
             <Box padding="4">
-              <Text variant="headingXl">Preview: {previewSection.name}</Text>
-              <Text variant="bodyMd">Preview functionality coming soon!</Text>
+              <Text variant="headingXl">Preview: {previewSection.displayName}</Text>
+              <img 
+                src={previewSection.thumbnail} 
+                alt={previewSection.displayName}
+                style={{ width: '300px', borderRadius: '8px', margin: '1rem 0' }}
+              />
+              <Text variant="bodyMd">{previewSection.description}</Text>
               <Box paddingBlockStart="4">
                 <Button onClick={() => setPreviewSection(null)}>Close Preview</Button>
               </Box>

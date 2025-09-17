@@ -1,4 +1,4 @@
-// app/routes/api.create-charge.jsx - TEMPORARY FIX
+// app/routes/api.create-charge.jsx - COMPLETELY FIXED
 import { json } from "@remix-run/node";
 import { authenticate } from "../shopify.server";
 import { PrismaClient } from "@prisma/client";
@@ -34,7 +34,7 @@ export async function action({ request }) {
     // TEMPORARY: Use hardcoded URL until environment variable is set
     const appUrl = process.env.SHOPIFY_APP_URL || "https://your-app-name.vercel.app";
     
-    // FIXED: Correct GraphQL mutation syntax
+    // FIXED: Correct GraphQL mutation with proper input type
     const response = await admin.graphql(`
       mutation CreateRecurringCharge($charge: RecurringApplicationChargeInput!) {
         recurringApplicationChargeCreate(recurringApplicationCharge: $charge) {

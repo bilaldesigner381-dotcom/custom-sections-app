@@ -1,4 +1,4 @@
-// app/routes/api.create-charge.jsx - FIXED
+// app/routes/api.create-charge.jsx - TEMPORARY FIX
 import { json } from "@remix-run/node";
 import { authenticate } from "../shopify.server";
 import { PrismaClient } from "@prisma/client";
@@ -31,18 +31,10 @@ export async function action({ request }) {
       finalPrice = 9.00 * (1 - parseFloat(discountPercentage) / 100);
     }
 
-    // FIXED: Use correct Shopify Admin API syntax
-    const chargeData = {
-      name: "Section Master Pro Plan",
-      price: finalPrice,
-      return_url: `${process.env.SHOPIFY_APP_URL}/app/upgrade/success`,
-      test: process.env.NODE_ENV === 'development', // Test in dev
-      trial_days: 0,
-      capped_amount: null,
-      terms: null
-    };
-
-    // Create recurring charge using GraphQL
+    // TEMPORARY: Use hardcoded URL until environment variable is set
+    const appUrl = process.env.SHOPIFY_APP_URL || "https://your-app-name.vercel.app";
+    
+    // FIXED: Correct GraphQL mutation syntax
     const response = await admin.graphql(`
       mutation CreateRecurringCharge($charge: RecurringApplicationChargeInput!) {
         recurringApplicationChargeCreate(recurringApplicationCharge: $charge) {
@@ -62,35 +54,42 @@ export async function action({ request }) {
       }
     `, {
       variables: {
-        charge: chargeData
+        charge: {
+          name: "Section Master Pro Plan",
+          price: finalPrice,
+          returnUrl: `${appUrl}/app/upgrade/success`,
+          test: process.env.NODE_ENV === 'development',
+          trialDays: 0
+        }
       }
     });
 
     const responseData = await response.json();
     
-    if (responseData.errors || responseData.data.recurringApplicationChargeCreate.userErrors.length > 0) {
-      const errors = responseData.errors || responseData.data.recurringApplicationChargeCreate.userErrors;
-      throw new Error(`Shopify API error: ${JSON.stringify(errors)}`);
+    // Check for GraphQL errors
+    if (responseData.errors) {
+      throw new Error(`GraphQL errors: ${JSON.stringify(responseData.errors)}`);
+    }
+
+    if (responseData.data.recurringApplicationChargeCreate.userErrors.length > 0) {
+      const errors = responseData.data.recurringApplicationChargeCreate.userErrors;
+      throw new Error(`Shopify API user errors: ${JSON.stringify(errors)}`);
     }
 
     const charge = responseData.data.recurringApplicationChargeCreate.recurringApplicationCharge;
 
-    // Save pending subscription with discount info
+    // Save pending subscription (temporarily without discount fields)
     await prisma.subscription.upsert({
       where: { shop: session.shop },
       update: { 
         chargeId: charge.id,
         status: "pending",
-        discountCode: discountCode || null,
-        discountPercentage: discountPercentage ? parseFloat(discountPercentage) : null
       },
       create: {
         shop: session.shop,
         chargeId: charge.id,
         plan: "pro",
         status: "pending",
-        discountCode: discountCode || null,
-        discountPercentage: discountPercentage ? parseFloat(discountPercentage) : null
       }
     });
 

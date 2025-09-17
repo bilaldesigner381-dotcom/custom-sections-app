@@ -3,11 +3,14 @@ import { json } from "@remix-run/node";
 import { authenticate } from "../shopify.server";
 import { PrismaClient } from "@prisma/client";
 
+// ✅ Import REST resource explicitly
+import { RecurringApplicationCharge } from "@shopify/shopify-api/rest/admin/2023-07/index.js";
+
 const prisma = new PrismaClient();
 
 export async function action({ request }) {
   try {
-    const { admin, session } = await authenticate.admin(request);
+    const { session } = await authenticate.admin(request);
 
     // Read form data for discounts
     const formData = await request.formData();
@@ -37,18 +40,14 @@ export async function action({ request }) {
       "https://custom-sections-app-4hst.vercel.app/";
 
     // ✅ Create RecurringApplicationCharge using REST API
-    const response = await admin.rest.RecurringApplicationCharge.create({
-      session,
-      body: {
-        name: "Section Master Pro Plan",
-        price: finalPrice,
-        return_url: `${appUrl}/app/upgrade/success`,
-        test: process.env.NODE_ENV === "development",
-        trial_days: 0,
-      },
+    const charge = new RecurringApplicationCharge({ session });
+    await charge.save({
+      name: "Section Master Pro Plan",
+      price: finalPrice,
+      return_url: `${appUrl}/app/upgrade/success`,
+      test: process.env.NODE_ENV === "development",
+      trial_days: 0,
     });
-
-    const charge = response.body.recurring_application_charge;
 
     // Save pending subscription in DB
     await prisma.subscription.upsert({
@@ -66,7 +65,7 @@ export async function action({ request }) {
     });
 
     return json({
-      confirmationUrl: charge.confirmation_url, // REST uses snake_case
+      confirmationUrl: charge.confirmation_url, // REST resource gives this
       originalPrice: 9.0,
       discountedPrice: finalPrice,
       discountApplied: !!discountPercentage,
@@ -83,3 +82,4 @@ export async function action({ request }) {
     );
   }
 }
+

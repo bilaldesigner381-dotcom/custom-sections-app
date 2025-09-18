@@ -1,7 +1,8 @@
 <p style="color:red; font-weight:bold;">
-  DEBUG: {{ shop.metafields.section_master.subscription_status }}
+  DEBUG: {{ app.metafields.section_master.subscription_status }}
 </p>
-{% if shop.metafields.section_master.subscription_status == "active" %}
+
+{% if app.metafields.section_master.subscription_status == "active" %}
   <!-- Sirf paid users -->
   <div class="premium-section">
     {{ section.settings.content }}

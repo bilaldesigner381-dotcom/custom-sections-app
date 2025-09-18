@@ -1,7 +1,7 @@
 {% comment %}
   Featured Product(s) Block with page visibility
 {% endcomment %}
-{% if app.metafields.section_master.subscription_status == "active" %}
+{% if shop.metafields.section_master.subscription_status == "active" %}
   <!-- Sirf paid users -->
   <div class="premium-section">
     {{ section.settings.content }}
@@ -14,7 +14,6 @@
     <a href="/apps/section-master/upgrade" class="button">Upgrade Now</a>
   </div>
 {% endif %}
-
 {% assign show_block = false %}
 
 {%- case block.settings.visibility -%}

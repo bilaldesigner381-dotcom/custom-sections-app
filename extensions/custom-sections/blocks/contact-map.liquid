@@ -1,3 +1,16 @@
+{% if app.metafields.section_master.subscription_status == "active" %}
+  <!-- Sirf paid users -->
+  <div class="premium-section">
+    {{ section.settings.content }}
+  </div>
+{% else %}
+  <!-- Locked message -->
+  <div style="text-align: center; padding: 2rem; border: 2px dashed #ccc;">
+    <h3>🔒 This section is premium</h3>
+    <p>Upgrade to <strong>Section Master Pro</strong> to unlock this section.</p>
+    <a href="/apps/section-master/upgrade" class="button">Upgrade Now</a>
+  </div>
+{% endif %}
 {% assign template = template.name %}
 
 {% assign show_block = false %}

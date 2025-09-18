@@ -1,3 +1,4 @@
+// app/routes/api.create-charge.jsx
 import { json } from "@remix-run/node";
 import { authenticate } from "../shopify.server";
 import { PrismaClient } from "@prisma/client";
@@ -104,6 +105,22 @@ export async function action({ request }) {
       },
     });
 
+    // 🔥 Set metafield in Shopify admin (automatic unlock after success)
+    await admin.graphql(`
+      mutation {
+        metafieldsSet(metafields: [
+          {
+            namespace: "section_master"
+            key: "subscription_status"
+            type: "single_line_text_field"
+            value: "active"
+          }
+        ]) {
+          userErrors { field message }
+        }
+      }
+    `);
+
     return json({
       confirmationUrl,
       originalPrice: 9,
@@ -122,5 +139,6 @@ export async function action({ request }) {
     );
   }
 }
+
 
 

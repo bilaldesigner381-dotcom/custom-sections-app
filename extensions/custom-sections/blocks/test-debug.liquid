@@ -1,0 +1,22 @@
+<!-- DEBUG Test Block -->
+<p style="color:red; font-weight:bold;">
+  DEBUG: {{ shop.metafields.section_master.subscription_status | default: "not set" }}
+</p>
+
+{% if shop.metafields.section_master.subscription_status == "active" %}
+  <div style="padding:1rem; border:2px solid green; text-align:center;">
+    ✅ Premium content unlocked (ACTIVE)
+  </div>
+{% else %}
+  <div style="padding:1rem; border:2px dashed red; text-align:center;">
+    🔒 Locked content (INACTIVE)
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Debug Test Block",
+  "target": "section",
+  "settings": []
+}
+{% endschema %}

@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 const CREATE_SUBSCRIPTION_MUTATION = `
   mutation CreateSubscription(
     $name: String!,
-    $price: Decimal!,
+    $price: MoneyInput!,
     $returnUrl: URL!,
     $test: Boolean!,
     $trialDays: Int!
@@ -19,7 +19,7 @@ const CREATE_SUBSCRIPTION_MUTATION = `
         {
           plan: {
             appRecurringPricingDetails: {
-              price: { amount: $price, currencyCode: USD },
+              price: $price,
               interval: EVERY_30_DAYS
             }
           }
@@ -73,7 +73,7 @@ export async function action({ request }) {
     const response = await admin.graphql(CREATE_SUBSCRIPTION_MUTATION, {
       variables: {
         name: "Section Master Pro Plan",
-        price: finalPrice,
+        price: { amount: finalPrice.toFixed(2), currencyCode: "USD" },
         returnUrl: `${appUrl}/app/upgrade/success`,
         test: process.env.NODE_ENV === "development",
         trialDays: 0,
@@ -81,6 +81,8 @@ export async function action({ request }) {
     });
 
     const data = await response.json();
+    console.log("🔍 Billing API response:", JSON.stringify(data, null, 2));
+
     const { appSubscriptionCreate } = data.data;
 
     if (appSubscriptionCreate.userErrors.length) {
@@ -105,22 +107,6 @@ export async function action({ request }) {
       },
     });
 
-    // 🔥 Set metafield in Shopify admin (automatic unlock after success)
-    await admin.graphql(`
-      mutation {
-        metafieldsSet(metafields: [
-          {
-            namespace: "section_master"
-            key: "subscription_status"
-            type: "single_line_text_field"
-            value: "active"
-          }
-        ]) {
-          userErrors { field message }
-        }
-      }
-    `);
-
     return json({
       confirmationUrl,
       originalPrice: 9,
@@ -128,7 +114,7 @@ export async function action({ request }) {
       discountApplied: !!discountPercentage,
     });
   } catch (error) {
-    console.error("Billing error details:", error);
+    console.error("❌ Billing error details:", error);
     return json(
       {
         error: "Payment setup failed. Please try again or contact support.",
@@ -139,6 +125,8 @@ export async function action({ request }) {
     );
   }
 }
+
+
 
 
 

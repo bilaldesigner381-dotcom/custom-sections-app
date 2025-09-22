@@ -1,0 +1,116 @@
+{% assign template = template.name %}
+{% assign show_block = false %}
+{% case block.settings.visibility %}
+  {% when 'all' %}{% assign show_block = true %}
+  {% when 'home' %}{% if template == 'index' %}{% assign show_block = true %}{% endif %}
+  {% when 'product' %}{% if template contains 'product' %}{% assign show_block = true %}{% endif %}
+  {% when 'collection' %}{% if template contains 'collection' %}{% assign show_block = true %}{% endif %}
+  {% when 'page' %}{% if template contains 'page' %}{% assign show_block = true %}{% endif %}
+{% endcase %}
+
+{% if show_block %}
+<div class="testimonials-section"
+     style="margin:{{ block.settings.section_margin }}px auto;
+            padding:{{ block.settings.section_padding }}px;
+            background:{{ block.settings.bg_color }};">
+
+  {% if block.settings.heading != blank %}
+    <h2 class="testimonials-heading"
+        style="font-size:{{ block.settings.heading_size }}px;color:{{ block.settings.heading_color }};">
+      {{ block.settings.heading }}
+    </h2>
+  {% endif %}
+
+  <div class="testimonials-wrapper{% if block.settings.enable_slider %} slider-enabled{% endif %}"
+       id="testimonial-slider-{{ block.id }}">
+
+    {% for i in (1..4) %}
+      {% assign t = "testimonial_" | append: i %}
+      {% assign text = block.settings[t | append: "_text"] %}
+      {% assign name = block.settings[t | append: "_name"] %}
+      {% assign image = block.settings[t | append: "_image"] %}
+
+      {% if text != blank %}
+        <div class="testimonial-card">
+          {% if image != blank %}
+            <img src="{{ image | image_url: width: 100 }}" alt="{{ name }}" class="testimonial-image"/>
+          {% endif %}
+          <p class="testimonial-text"
+             style="font-size:{{ block.settings.text_size }}px;color:{{ block.settings.text_color }};">
+            "{{ text }}"
+          </p>
+          {% if name != blank %}
+            <p class="testimonial-name"
+               style="font-size:{{ block.settings.name_size }}px;color:{{ block.settings.name_color }};">
+              – {{ name }}
+            </p>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<style>
+.testimonials-section{max-width:1000px;margin:0 auto;text-align:center}
+.testimonials-heading{font-weight:700;margin-bottom:30px}
+.testimonials-wrapper{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.testimonials-wrapper.slider-enabled{display:flex;overflow-x:auto;gap:20px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:10px}
+.testimonials-wrapper.slider-enabled .testimonial-card{flex:0 0 80%;max-width:80%;scroll-snap-align:center}
+.testimonial-card{background:#fff;padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.08);transition:transform .3s}
+.testimonial-card:hover{transform:translateY(-5px)}
+.testimonial-image{width:60px;height:60px;border-radius:50%;margin-bottom:15px;object-fit:cover}
+.testimonial-text{font-style:italic;margin-bottom:10px}
+.testimonial-name{font-weight:600}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded",()=> {
+  const slider=document.querySelector("#testimonial-slider-{{ block.id }}");
+  if(slider && slider.classList.contains("slider-enabled")){
+    let i=0,cards=slider.querySelectorAll(".testimonial-card");
+    setInterval(()=>{i=(i+1)%cards.length;slider.scrollTo({left:cards[i].offsetLeft,behavior:"smooth"})},5000);
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "target": "section",
+  "settings": [
+    { "type": "select", "id": "visibility", "label": "Show on", "options": [
+      { "value": "all", "label": "All" },
+      { "value": "home", "label": "Home" },
+      { "value": "product", "label": "Product" },
+      { "value": "collection", "label": "Collection" },
+      { "value": "page", "label": "Page" }
+    ], "default": "all" },
+
+    { "type": "text", "id": "heading", "label": "Heading", "default": "What Our Customers Say" },
+
+    { "type": "range", "id": "section_margin", "label": "Margin", "min":0,"max":100,"step":5,"unit":"px","default":40 },
+    { "type": "range", "id": "section_padding", "label": "Padding", "min":0,"max":100,"step":5,"unit":"px","default":30 },
+    { "type": "color", "id": "bg_color", "label": "Background", "default":"#f9f9f9" },
+
+    { "type": "range", "id": "heading_size", "label": "Heading Size", "min":16,"max":48,"step":1,"unit":"px","default":26 },
+    { "type": "color", "id": "heading_color", "label": "Heading Color", "default":"#000" },
+
+    { "type": "range", "id": "text_size", "label": "Text Size", "min":12,"max":28,"step":1,"unit":"px","default":16 },
+    { "type": "color", "id": "text_color", "label": "Text Color", "default":"#333" },
+
+    { "type": "range", "id": "name_size", "label": "Name Size", "min":12,"max":24,"step":1,"unit":"px","default":14 },
+    { "type": "color", "id": "name_color", "label": "Name Color", "default":"#111" },
+
+    { "type": "checkbox", "id": "enable_slider", "label": "Enable Slider", "default": false },
+
+    {% for i in (1..4) %}
+      { "type":"textarea","id":"testimonial_{{ i }}_text","label":"Testimonial {{ i }} Text" },
+      { "type":"text","id":"testimonial_{{ i }}_name","label":"Testimonial {{ i }} Name" },
+      { "type":"image_picker","id":"testimonial_{{ i }}_image","label":"Testimonial {{ i }} Image" }
+      {% if i < 4 %},{% endif %}
+    {% endfor %}
+  ]
+}
+{% endschema %}

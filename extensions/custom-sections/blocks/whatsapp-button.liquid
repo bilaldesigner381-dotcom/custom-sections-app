@@ -3,13 +3,17 @@
      target="_blank"
      class="whatsapp-link">
     {% if block.settings.custom_icon != blank %}
-      <img src="{{ block.settings.custom_icon | image_url }}" 
+      <img src="{{ block.settings.custom_icon | image_url: width: block.settings.icon_size }}" 
            alt="WhatsApp" 
-           class="whatsapp-icon">
+           class="whatsapp-icon"
+           width="{{ block.settings.icon_size }}" 
+           height="{{ block.settings.icon_size }}">
     {% else %}
-      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" 
+      <img src="{{ 'WhatsApp.svg' | asset_url }}" 
            alt="WhatsApp" 
-           class="whatsapp-icon">
+           class="whatsapp-icon"
+           width="{{ block.settings.icon_size }}" 
+           height="{{ block.settings.icon_size }}">
     {% endif %}
   </a>
 </div>
@@ -89,5 +93,3 @@
   ]
 }
 {% endschema %}
-
-

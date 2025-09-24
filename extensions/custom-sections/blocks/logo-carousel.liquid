@@ -35,23 +35,30 @@
     <div class="logo-carousel-wrapper">
       <div class="logo-carousel-track" style="animation-duration: {{ block.settings.scroll_speed }}s;">
         <!-- First set of logos -->
-        {% for i in (1..12) %}
-          {% assign logo_id = 'logo_' | append: i %}
-          {% if block.settings[logo_id] != blank %}
-            <div class="logo-carousel-item">
-              <img src="{{ block.settings[logo_id] | image_url: width: 200 }}" alt="Brand Logo">
-            </div>
-          {% endif %}
-        {% endfor %}
-        <!-- Duplicate set of logos (for seamless loop) -->
-        {% for i in (1..12) %}
-          {% assign logo_id = 'logo_' | append: i %}
-          {% if block.settings[logo_id] != blank %}
-            <div class="logo-carousel-item">
-              <img src="{{ block.settings[logo_id] | image_url: width: 200 }}" alt="Brand Logo">
-            </div>
-          {% endif %}
-        {% endfor %}
+{% for i in (1..12) %}
+  {% assign logo_id = 'logo_' | append: i %}
+  {% if block.settings[logo_id] != blank %}
+    <div class="logo-carousel-item">
+      <img src="{{ block.settings[logo_id] | image_url: width: 200 }}" 
+           alt="Brand Logo"
+           width="200"
+           height="auto">
+    </div>
+  {% endif %}
+{% endfor %}
+
+<!-- Duplicate set of logos (for seamless loop) -->
+{% for i in (1..12) %}
+  {% assign logo_id = 'logo_' | append: i %}
+  {% if block.settings[logo_id] != blank %}
+    <div class="logo-carousel-item">
+      <img src="{{ block.settings[logo_id] | image_url: width: 200 }}" 
+           alt="Brand Logo"
+           width="200"
+           height="auto">
+    </div>
+  {% endif %}
+{% endfor %}
       </div>
     </div>
   </div>
@@ -128,7 +135,7 @@
         { "value": "collection", "label": "Collection pages only" },
         { "value": "page", "label": "Custom pages only" }
       ],
-      "default": "page"
+      "default": "home"
     },
     {
       "type": "text",

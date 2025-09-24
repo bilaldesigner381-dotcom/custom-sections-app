@@ -1,0 +1,265 @@
+{% if shop.metafields.section_master.subscription_status == "active" %}
+  <!-- Paid content -->
+  {{ block.settings.content }}
+{% else %}
+  <!-- Locked message -->
+  <div style="text-align:center; padding:2rem; border:2px dashed #ccc;">
+    <h3>🔒 This section is premium</h3>
+    <p>Upgrade to <strong>Section Master Pro</strong> to unlock this section.</p>
+    <a href="/apps/section-master/upgrade" class="button">Upgrade Now</a>
+  </div>
+{% endif %}
+
+{% assign template = template.name %}
+
+{% assign show_block = false %}
+{% case block.settings.visibility %}
+  {% when 'all' %}
+    {% assign show_block = true %}
+  {% when 'home' %}
+    {% if template == 'index' %}{% assign show_block = true %}{% endif %}
+  {% when 'product' %}
+    {% if template contains 'product' %}{% assign show_block = true %}{% endif %}
+  {% when 'collection' %}
+    {% if template contains 'collection' %}{% assign show_block = true %}{% endif %}
+  {% when 'page' %}
+    {% if template contains 'page' %}{% assign show_block = true %}{% endif %}
+{% endcase %}
+
+{% if show_block %}
+<div class="instagram-feed" style="background: {{ block.settings.bg_color }}; padding: {{ block.settings.section_padding }}px 0;">
+  {% if block.settings.heading != blank %}
+    <h2 class="insta-heading" style="font-size: {{ block.settings.heading_size }}px;">
+      {{ block.settings.heading }}
+    </h2>
+  {% endif %}
+
+  {% if block.settings.subheading != blank %}
+    <p class="insta-subheading">{{ block.settings.subheading }}</p>
+  {% endif %}
+
+  <div class="insta-gallery">
+    {% for i in (1..10) %}
+      {% assign image_id = 'image_' | append: i %}
+      {% if block.settings[image_id] != blank %}
+        {% assign img_url = block.settings[image_id] | image_url: width: 400 %}
+        <div class="insta-item">
+          <a href="{{ block.settings[image_id] | image_url: width: 1000, height: 1000 }}" data-lightbox="insta-gallery">
+            <img src="{{ img_url }}" alt="Instagram Image {{ i }}" width="400" height="400">
+          </a>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  {% if block.settings.profile_link != blank %}
+    <div class="insta-button-wrapper">
+      <a href="{{ block.settings.profile_link }}" target="_blank" rel="noopener" class="insta-button" style="background-color: {{ block.settings.button_color }};">
+        {{ block.settings.button_label }}
+      </a>
+    </div>
+  {% endif %}
+</div>
+
+<!-- Lightbox Modal -->
+<div id="insta-lightbox" class="insta-lightbox">
+  <span class="insta-close">&times;</span>
+  <img class="insta-lightbox-img" id="insta-lightbox-img" width="800" height="800">
+</div>
+{% endif %}
+
+<style>
+.instagram-feed {
+  text-align: center;
+}
+.insta-heading {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.insta-subheading {
+  margin-bottom: 30px;
+  color: #555;
+  font-size: 1.1rem;
+}
+.insta-gallery {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 15px;
+  justify-content: center;
+}
+@media (max-width: 1024px) {
+  .insta-gallery {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .insta-gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.insta-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+.insta-item img:hover {
+  transform: scale(1.05);
+}
+.insta-button-wrapper {
+  margin-top: 30px;
+}
+.insta-button {
+  display: inline-block;
+  padding: 12px 24px;
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: opacity 0.3s ease;
+}
+.insta-button:hover {
+  opacity: 0.85;
+}
+/* Lightbox */
+.insta-lightbox {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  padding-top: 80px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.9);
+}
+.insta-lightbox-img {
+  margin: auto;
+  display: block;
+  max-width: 90%;
+  max-height: 80%;
+}
+.insta-close {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  color: #fff;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const lightbox = document.getElementById("insta-lightbox");
+  const lightboxImg = document.getElementById("insta-lightbox-img");
+  const closeBtn = document.querySelector(".insta-close");
+
+  document.querySelectorAll(".insta-item img").forEach(img => {
+    img.addEventListener("click", function(e) {
+      e.preventDefault();
+      lightbox.style.display = "block";
+      lightboxImg.src = this.parentNode.getAttribute("href");
+    });
+  });
+
+  closeBtn.onclick = function() {
+    lightbox.style.display = "none";
+  };
+
+  lightbox.onclick = function(e) {
+    if (e.target === lightbox) {
+      lightbox.style.display = "none";
+    }
+  };
+});
+</script>
+
+{% schema %}
+{
+  "name": "Instagram Feed",
+  "target": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "visibility",
+      "label": "Show this block on",
+      "options": [
+        { "value": "all", "label": "All pages" },
+        { "value": "home", "label": "Homepage only" },
+        { "value": "product", "label": "Product pages only" },
+        { "value": "collection", "label": "Collection pages only" },
+        { "value": "page", "label": "Custom pages only" }
+      ],
+      "default": "page"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Follow us on Instagram"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "See how our community uses our products"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "default": 28,
+      "label": "Heading Font Size"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 40,
+      "label": "Section Padding"
+    },
+    { "type": "image_picker", "id": "image_1", "label": "Instagram Image 1" },
+    { "type": "image_picker", "id": "image_2", "label": "Instagram Image 2" },
+    { "type": "image_picker", "id": "image_3", "label": "Instagram Image 3" },
+    { "type": "image_picker", "id": "image_4", "label": "Instagram Image 4" },
+    { "type": "image_picker", "id": "image_5", "label": "Instagram Image 5" },
+    { "type": "image_picker", "id": "image_6", "label": "Instagram Image 6" },
+    { "type": "image_picker", "id": "image_7", "label": "Instagram Image 7" },
+    { "type": "image_picker", "id": "image_8", "label": "Instagram Image 8" },
+    { "type": "image_picker", "id": "image_9", "label": "Instagram Image 9" },
+    { "type": "image_picker", "id": "image_10", "label": "Instagram Image 10" },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "View on Instagram"
+    },
+    {
+      "type": "url",
+      "id": "profile_link",
+      "label": "Instagram Profile Link"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button Color",
+      "default": "#E1306C"
+    }
+  ]
+}
+{% endschema %}
+

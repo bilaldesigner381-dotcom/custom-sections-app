@@ -25,12 +25,16 @@
               <a href="{{ product.url }}" class="featured-product-card-link" style="text-decoration:none; color: inherit;">
                 <div class="featured-product-card">
                   {% if product.featured_image %}
-                    <img src="{{ product.featured_image | image_url: width: 500 }}" alt="{{ product.title | escape }}">
+                    <img 
+                      src="{{ product.featured_image | image_url: width: 300 }}" 
+                      alt="{{ product.title | escape }}" 
+                      width="300" 
+                      height="300">
                   {% endif %}
                   <h3 class="product-title" style="font-size: {{ block.settings.title_size }}px;">{{ product.title }}</h3>
                   <p class="product-price" style="font-size: {{ block.settings.price_size }}px;">{{ product.price | money }}</p>
 
-                  <form action="/cart/add" method="post" class="add-to-cart-form">
+                  <form action="{{ routes.cart_add_url }}" method="post" class="add-to-cart-form">
                     <input type="hidden" name="id" value="{{ product.variants.first.id }}">
                     <button type="submit" class="add-to-cart-btn" style="font-size: {{ block.settings.button_font_size }}px; background: {{ block.settings.button_bg_color }}; color: {{ block.settings.button_text_color }}; display:inline-block; padding:12px 24px; border-radius:8px; margin-top:10px;">
                       {{ block.settings.button_text }}
@@ -52,7 +56,11 @@
           <div class="featured-product-wrapper">
             <div class="featured-product-image">
               {% if product.featured_image %}
-                <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title | escape }}">
+                <img 
+                  src="{{ product.featured_image | image_url: width: 800 }}" 
+                  alt="{{ product.title | escape }}" 
+                  width="800" 
+                  height="800">
               {% endif %}
             </div>
             <div class="featured-product-info">
@@ -61,7 +69,7 @@
               {% if product.description != blank %}
                 <div class="product-description">{{ product.description | strip_html | truncate: 200 }}</div>
               {% endif %}
-              <form action="/cart/add" method="post">
+              <form action="{{ routes.cart_add_url }}" method="post">
                 <input type="hidden" name="id" value="{{ product.variants.first.id }}">
                 <button type="submit" class="add-to-cart-btn" style="font-size: {{ block.settings.button_font_size }}px; background: {{ block.settings.button_bg_color }}; color: {{ block.settings.button_text_color }}; display:inline-block; padding:12px 24px; border-radius:8px; margin-top:10px;">
                   {{ block.settings.button_text }}
@@ -80,6 +88,15 @@
 <style>
   .featured-product-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; text-align: center; }
   .featured-heading { font-weight: 700; margin-bottom: 10px; }
+  .featured-slider .slider-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+.featured-slider .featured-product-card {
+  max-width: 320px;
+}
   .featured-subheading { margin-bottom: 40px; font-size: 1.2rem; color: #555; }
   .featured-product-wrapper, .featured-product-card-link { display: flex; align-items: center; justify-content: center; gap: 40px; flex-wrap: wrap; transition: transform 0.2s ease; }
   .featured-product-wrapper:hover, .featured-product-card-link:hover { transform: translateY(-3px); }

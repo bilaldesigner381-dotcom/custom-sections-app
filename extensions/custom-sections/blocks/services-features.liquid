@@ -1,68 +1,92 @@
-{% if shop.metafields.section_master.subscription_status == "active" %}
-  <!-- Paid content -->
-  {{ block.settings.content }}
-{% else %}
-  <!-- Locked message -->
-  <div style="text-align:center; padding:2rem; border:2px dashed #ccc;">
-    <h3>🔒 This section is premium</h3>
-    <p>Upgrade to <strong>Section Master Pro</strong> to unlock this section.</p>
-    <a href="/apps/section-master/upgrade" class="button">Upgrade Now</a>
-  </div>
-{% endif %}
+{% assign template = template.name %}
+{% assign show_block = false %}
+{% case block.settings.visibility %}
+  {% when 'all' %}
+    {% assign show_block = true %}
+  {% when 'home' %}
+    {% if template == 'index' %}{% assign show_block = true %}{% endif %}
+  {% when 'product' %}
+    {% if template contains 'product' %}{% assign show_block = true %}{% endif %}
+  {% when 'collection' %}
+    {% if template contains 'collection' %}{% assign show_block = true %}{% endif %}
+  {% when 'page' %}
+    {% if template contains 'page' %}{% assign show_block = true %}{% endif %}
+{% endcase %}
 
-<div class="services-section" style="background: {{ block.settings.bg_color }}; padding: {{ block.settings.section_padding }}px 0; margin: {{ block.settings.section_margin }}px 0;">
-  <div class="services-container">
-    {% if block.settings.heading != blank %}
-      <h2 class="services-heading" style="font-size: {{ block.settings.heading_size }}px;">{{ block.settings.heading }}</h2>
-    {% endif %}
-
-    <div class="services-grid">
-      <!-- Service 1 -->
-      <div class="service-item">
-        {% if block.settings.icon_1 != blank %}
-          <div class="service-icon">
-            <img src="{{ block.settings.icon_1 | image_url: width: 80 }}" alt="{{ block.settings.title_1 }}">
-          </div>
+{% if show_block %}
+  {% if shop.metafields.section_master.subscription_status == "active" %}
+    <!-- Paid content -->
+    <div class="services-section" style="background: {{ block.settings.bg_color }}; padding: {{ block.settings.section_padding }}px 0; margin: {{ block.settings.section_margin }}px 0;">
+      <div class="services-container">
+        {% if block.settings.heading != blank %}
+          <h2 class="services-heading" style="font-size: {{ block.settings.heading_size }}px;">{{ block.settings.heading }}</h2>
         {% endif %}
-        <h3 class="service-title" style="font-size: {{ block.settings.title_size }}px;">{{ block.settings.title_1 }}</h3>
-        <p class="service-desc" style="font-size: {{ block.settings.desc_size }}px;">{{ block.settings.desc_1 }}</p>
-      </div>
 
-      <!-- Service 2 -->
-      <div class="service-item">
-        {% if block.settings.icon_2 != blank %}
-          <div class="service-icon">
-            <img src="{{ block.settings.icon_2 | image_url: width: 80 }}" alt="{{ block.settings.title_2 }}">
+        <div class="services-grid">
+          <!-- Service 1 -->
+          <div class="service-item">
+            {% if block.settings.icon_1 != blank %}
+              <div class="service-icon">
+                <img src="{{ block.settings.icon_1 | image_url: width: 200 }}" 
+                     alt="{{ block.settings.title_1 }}"
+                     width="80" height="80">
+              </div>
+            {% endif %}
+            <h3 class="service-title" style="font-size: {{ block.settings.title_size }}px;">{{ block.settings.title_1 }}</h3>
+            <p class="service-desc" style="font-size: {{ block.settings.desc_size }}px;">{{ block.settings.desc_1 }}</p>
           </div>
-        {% endif %}
-        <h3 class="service-title" style="font-size: {{ block.settings.title_size }}px;">{{ block.settings.title_2 }}</h3>
-        <p class="service-desc" style="font-size: {{ block.settings.desc_size }}px;">{{ block.settings.desc_2 }}</p>
-      </div>
 
-      <!-- Service 3 -->
-      <div class="service-item">
-        {% if block.settings.icon_3 != blank %}
-          <div class="service-icon">
-            <img src="{{ block.settings.icon_3 | image_url: width: 80 }}" alt="{{ block.settings.title_3 }}">
+          <!-- Service 2 -->
+          <div class="service-item">
+            {% if block.settings.icon_2 != blank %}
+              <div class="service-icon">
+                <img src="{{ block.settings.icon_2 | image_url: width: 200 }}" 
+                     alt="{{ block.settings.title_2 }}"
+                     width="80" height="80">
+              </div>
+            {% endif %}
+            <h3 class="service-title" style="font-size: {{ block.settings.title_size }}px;">{{ block.settings.title_2 }}</h3>
+            <p class="service-desc" style="font-size: {{ block.settings.desc_size }}px;">{{ block.settings.desc_2 }}</p>
           </div>
-        {% endif %}
-        <h3 class="service-title" style="font-size: {{ block.settings.title_size }}px;">{{ block.settings.title_3 }}</h3>
-        <p class="service-desc" style="font-size: {{ block.settings.desc_size }}px;">{{ block.settings.desc_3 }}</p>
-      </div>
 
-      <!-- Service 4 -->
-      <div class="service-item">
-        {% if block.settings.icon_4 != blank %}
-          <div class="service-icon">
-            <img src="{{ block.settings.icon_4 | image_url: width: 80 }}" alt="{{ block.settings.title_4 }}">
+          <!-- Service 3 -->
+          <div class="service-item">
+            {% if block.settings.icon_3 != blank %}
+              <div class="service-icon">
+                <img src="{{ block.settings.icon_3 | image_url: width: 200 }}" 
+                     alt="{{ block.settings.title_3 }}"
+                     width="80" height="80">
+              </div>
+            {% endif %}
+            <h3 class="service-title" style="font-size: {{ block.settings.title_size }}px;">{{ block.settings.title_3 }}</h3>
+            <p class="service-desc" style="font-size: {{ block.settings.desc_size }}px;">{{ block.settings.desc_3 }}</p>
           </div>
-        {% endif %}
-        <h3 class="service-title" style="font-size: {{ block.settings.title_size }}px;">{{ block.settings.title_4 }}</h3>
-        <p class="service-desc" style="font-size: {{ block.settings.desc_size }}px;">{{ block.settings.desc_4 }}</p>
+
+          <!-- Service 4 -->
+          <div class="service-item">
+            {% if block.settings.icon_4 != blank %}
+              <div class="service-icon">
+                <img src="{{ block.settings.icon_4 | image_url: width: 200 }}" 
+                     alt="{{ block.settings.title_4 }}"
+                     width="80" height="80">
+              </div>
+            {% endif %}
+            <h3 class="service-title" style="font-size: {{ block.settings.title_size }}px;">{{ block.settings.title_4 }}</h3>
+            <p class="service-desc" style="font-size: {{ block.settings.desc_size }}px;">{{ block.settings.desc_4 }}</p>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+  {% else %}
+    <!-- Locked message -->
+    <div style="text-align:center; padding:2rem; border:2px dashed #ccc;">
+      <h3>🔒 This section is premium</h3>
+      <p>Upgrade to <strong>Section Master Pro</strong> to unlock this section.</p>
+      <a href="/apps/section-master/upgrade" class="button">Upgrade Now</a>
+    </div>
+  {% endif %}
+{% endif %}
+
 
 <style>
 .services-container {
@@ -118,6 +142,19 @@
   "name": "Services / Features",
   "target": "section",
   "settings": [
+    {
+      "type": "select",
+      "id": "visibility",
+      "label": "Show this section on",
+      "options": [
+        { "value": "all", "label": "All pages" },
+        { "value": "home", "label": "Homepage only" },
+        { "value": "product", "label": "Product pages only" },
+        { "value": "collection", "label": "Collection pages only" },
+        { "value": "page", "label": "Custom pages only" }
+      ],
+      "default": "home"
+    },
     {
       "type": "text",
       "id": "heading",
@@ -246,11 +283,3 @@
   ]
 }
 {% endschema %}
-
-
-
-
-
-
-
-

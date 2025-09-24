@@ -1,68 +1,85 @@
-{% if shop.metafields.section_master.subscription_status == "active" %}
-  <!-- Paid content -->
-  {{ block.settings.content }}
-{% else %}
-  <!-- Locked message -->
-  <div style="text-align:center; padding:2rem; border:2px dashed #ccc;">
-    <h3>🔒 This section is premium</h3>
-    <p>Upgrade to <strong>Section Master Pro</strong> to unlock this section.</p>
-    <a href="/apps/section-master/upgrade" class="button">Upgrade Now</a>
-  </div>
+{% assign template = template.name %}
+{% assign show_block = false %}
+{% case block.settings.visibility %}
+  {% when 'all' %}
+    {% assign show_block = true %}
+  {% when 'home' %}
+    {% if template == 'index' %}{% assign show_block = true %}{% endif %}
+  {% when 'product' %}
+    {% if template contains 'product' %}{% assign show_block = true %}{% endif %}
+  {% when 'collection' %}
+    {% if template contains 'collection' %}{% assign show_block = true %}{% endif %}
+  {% when 'page' %}
+    {% if template contains 'page' %}{% assign show_block = true %}{% endif %}
+{% endcase %}
+
+{% if show_block %}
+  {% if shop.metafields.section_master.subscription_status == "active" %}
+    <!-- Paid content -->
+    <div class="hero-banner-section"
+         style="
+           background: {{ block.settings.bg_color }};
+           padding: {{ block.settings.section_padding }}px 0;
+           --hero-h-size-desktop: {{ block.settings.heading_size_desktop }}px;
+           --hero-h-size-mobile: {{ block.settings.heading_size_mobile }}px;
+           --hero-h-color: {{ block.settings.heading_color }};
+           --hero-sub-size-desktop: {{ block.settings.subheading_size_desktop }}px;
+           --hero-sub-size-mobile: {{ block.settings.subheading_size_mobile }}px;
+           --hero-sub-color: {{ block.settings.subheading_color }};
+           --hero-text-align: {{ block.settings.text_vertical_align }};
+         ">
+      <div class="hero-banner-wrapper">
+        <!-- LEFT TEXT -->
+        <div class="hero-text">
+          {% if block.settings.heading != blank %}
+            <h2 class="hero-heading">{{ block.settings.heading }}</h2>
+          {% endif %}
+          {% if block.settings.subheading != blank %}
+            <p class="hero-subheading">{{ block.settings.subheading }}</p>
+          {% endif %}
+          {% if block.settings.button_text != blank %}
+            <a href="{{ block.settings.button_link }}" class="hero-btn"
+               style="font-size: {{ block.settings.button_font_size }}px; background: {{ block.settings.button_bg_color }}; color: {{ block.settings.button_text_color }};">
+              {{ block.settings.button_text }}
+            </a>
+          {% endif %}
+        </div>
+
+        <!-- RIGHT IMAGE -->
+        <div class="hero-image">
+         {% if block.settings.main_image_1 != blank %}
+  <img id="hero-main-image" 
+       src="{{ block.settings.main_image_1 | image_url: width: 800 }}" 
+       alt="Hero Image"
+       width="800"
+       height="auto">
 {% endif %}
 
-{% assign template = template.name %}
-
-{% if template == 'index' %}
-<div class="hero-banner-section"
-     style="
-       background: {{ block.settings.bg_color }};
-       padding: {{ block.settings.section_padding }}px 0;
-       --hero-h-size-desktop: {{ block.settings.heading_size_desktop }}px;
-       --hero-h-size-mobile: {{ block.settings.heading_size_mobile }}px;
-       --hero-h-color: {{ block.settings.heading_color }};
-       --hero-sub-size-desktop: {{ block.settings.subheading_size_desktop }}px;
-       --hero-sub-size-mobile: {{ block.settings.subheading_size_mobile }}px;
-       --hero-sub-color: {{ block.settings.subheading_color }};
-       --hero-text-align: {{ block.settings.text_vertical_align }};
-     ">
-  <div class="hero-banner-wrapper">
-    <!-- LEFT TEXT -->
-    <div class="hero-text">
-      {% if block.settings.heading != blank %}
-        <h2 class="hero-heading">{{ block.settings.heading }}</h2>
-      {% endif %}
-      {% if block.settings.subheading != blank %}
-        <p class="hero-subheading">{{ block.settings.subheading }}</p>
-      {% endif %}
-      {% if block.settings.button_text != blank %}
-        <a href="{{ block.settings.button_link }}" class="hero-btn"
-           style="font-size: {{ block.settings.button_font_size }}px; background: {{ block.settings.button_bg_color }}; color: {{ block.settings.button_text_color }};">
-          {{ block.settings.button_text }}
-        </a>
-      {% endif %}
-    </div>
-
-    <!-- RIGHT IMAGE -->
-    <div class="hero-image">
-      {% if block.settings.main_image_1 != blank %}
-        <img id="hero-main-image" src="{{ block.settings.main_image_1 | image_url: width: 800 }}" alt="Hero Image">
-      {% endif %}
-
-      <!-- THUMBNAILS SLIDER -->
-      <div class="hero-thumbnails">
-        {% for i in (1..6) %}
-          {% assign image_setting = 'main_image_' | append: i %}
-          {% if block.settings[image_setting] != blank %}
-            <img src="{{ block.settings[image_setting] | image_url: width: 150 }}"
-                 data-full="{{ block.settings[image_setting] | image_url: width: 800 }}"
-                 class="hero-thumbnail"
-                 alt="Thumb {{ i }}">
-          {% endif %}
-        {% endfor %}
+<!-- THUMBNAILS SLIDER -->
+<div class="hero-thumbnails">
+  {% for i in (1..6) %}
+    {% assign image_setting = 'main_image_' | append: i %}
+    {% if block.settings[image_setting] != blank %}
+      <img src="{{ block.settings[image_setting] | image_url: width: 150 }}"
+           data-full="{{ block.settings[image_setting] | image_url: width: 800 }}"
+           class="hero-thumbnail"
+           alt="Thumb {{ i }}"
+           width="150"
+           height="auto">
+    {% endif %}
+  {% endfor %}
+</div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+  {% else %}
+    <!-- Locked message -->
+    <div style="text-align:center; padding:2rem; border:2px dashed #ccc;">
+      <h3>🔒 This section is premium</h3>
+      <p>Upgrade to <strong>Section Master Pro</strong> to unlock this section.</p>
+      <a href="/apps/section-master/upgrade" class="button">Upgrade Now</a>
+    </div>
+  {% endif %}
 {% endif %}
 
 <style>
@@ -113,6 +130,19 @@ document.addEventListener('DOMContentLoaded', function() {
   "name": "Hero Banner Slider",
   "target": "section",
   "settings": [
+    {
+      "type": "select",
+      "id": "visibility",
+      "label": "Show this section on",
+      "options": [
+        { "value": "all", "label": "All pages" },
+        { "value": "home", "label": "Homepage only" },
+        { "value": "product", "label": "Product pages only" },
+        { "value": "collection", "label": "Collection pages only" },
+        { "value": "page", "label": "Custom pages only" }
+      ],
+      "default": "home"
+    },
     { "type": "text", "id": "heading", "label": "Heading", "default": "New Season Styles You’ll Love" },
     { "type": "color", "id": "heading_color", "label": "Heading Color", "default": "#000000" },
     { "type": "range", "id": "heading_size_desktop", "label": "Heading Font Size (Desktop)", "min": 16, "max": 80, "step": 2, "default": 36 },

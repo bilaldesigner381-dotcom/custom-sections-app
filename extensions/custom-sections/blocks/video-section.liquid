@@ -1,81 +1,92 @@
-{% if shop.metafields.section_master.subscription_status == "active" %}
-  <!-- Paid content -->
-  {{ block.settings.content }}
-{% else %}
-  <!-- Locked message -->
-  <div style="text-align:center; padding:2rem; border:2px dashed #ccc;">
-    <h3>🔒 This section is premium</h3>
-    <p>Upgrade to <strong>Section Master Pro</strong> to unlock this section.</p>
-    <a href="/apps/section-master/upgrade" class="button">Upgrade Now</a>
-  </div>
+{% assign template = template.name %}
+{% assign show_block = false %}
+{% case block.settings.visibility %}
+  {% when 'all' %}
+    {% assign show_block = true %}
+  {% when 'home' %}
+    {% if template == 'index' %}{% assign show_block = true %}{% endif %}
+  {% when 'product' %}
+    {% if template contains 'product' %}{% assign show_block = true %}{% endif %}
+  {% when 'collection' %}
+    {% if template contains 'collection' %}{% assign show_block = true %}{% endif %}
+  {% when 'page' %}
+    {% if template contains 'page' %}{% assign show_block = true %}{% endif %}
+{% endcase %}
+
+{% if show_block %}
+  {% if shop.metafields.section_master.subscription_status == "active" %}
+    <!-- Paid content -->
+    <div class="video-section"
+        style="margin: {{ block.settings.section_margin }}px auto;
+              padding: {{ block.settings.section_padding }}px;
+              background-color: {{ block.settings.bg_color }};
+              {% unless block.settings.full_width %}max-width: 1000px;{% endunless %}">
+
+      {% if block.settings.heading != blank %}
+        <h2 class="video-heading"
+            style="font-size: {{ block.settings.heading_size }}px; color: {{ block.settings.heading_color }};">
+          {{ block.settings.heading }}
+        </h2>
+      {% endif %}
+
+      <div class="video-wrapper">
+        {% assign youtube_id = '' %}
+        {% if block.settings.video_url contains "youtube.com/watch?v=" %}
+          {% assign youtube_id = block.settings.video_url | split: 'v=' | last | split: '&' | first %}
+        {% elsif block.settings.video_url contains "youtu.be/" %}
+          {% assign youtube_id = block.settings.video_url | split: '/' | last | split: '?' | first %}
+        {% endif %}
+
+        {% if youtube_id != blank %}
+          <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/{{ youtube_id }}"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen></iframe>
+          </div>
+
+        {% elsif block.settings.video_url contains "vimeo.com" %}
+          <div class="video-container">
+            <iframe src="https://player.vimeo.com/video/{{ block.settings.video_url | split: '/' | last | split: '?' | first }}"
+              frameborder="0"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen></iframe>
+          </div>
+
+        {% elsif block.settings.shopify_video != blank %}
+          <div class="video-container">
+            {{ block.settings.shopify_video | video_tag: controls: true, autoplay: false, muted: false, loop: false }}
+          </div>
+
+        {% else %}
+          <div style="padding:40px; text-align:center; color:#777; font-size:16px; border:2px dashed #ccc; border-radius:12px;">
+            🎥 Add a YouTube/Vimeo link or upload a Shopify video to display here.
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+  {% else %}
+    <!-- Locked message -->
+    <div style="text-align:center; padding:2rem; border:2px dashed #ccc;">
+      <h3>🔒 This section is premium</h3>
+      <p>Upgrade to <strong>Section Master Pro</strong> to unlock this section.</p>
+      <a href="/apps/section-master/upgrade" class="button">Upgrade Now</a>
+    </div>
+  {% endif %}
 {% endif %}
 
-<div class="video-section"
-     style="margin: {{ block.settings.section_margin }}px auto;
-            padding: {{ block.settings.section_padding }}px;
-            background-color: {{ block.settings.bg_color }};
-            {% unless block.settings.full_width %}max-width: 1000px;{% endunless %}">
-
-  {% if block.settings.heading != blank %}
-    <h2 class="video-heading"
-        style="font-size: {{ block.settings.heading_size }}px; color: {{ block.settings.heading_color }};">
-      {{ block.settings.heading }}
-    </h2>
-  {% endif %}
-
-  <div class="video-wrapper">
-    {% assign youtube_id = '' %}
-    {% if block.settings.video_url contains "youtube.com/watch?v=" %}
-      {% assign youtube_id = block.settings.video_url | split: 'v=' | last | split: '&' | first %}
-    {% elsif block.settings.video_url contains "youtu.be/" %}
-      {% assign youtube_id = block.settings.video_url | split: '/' | last | split: '?' | first %}
-    {% endif %}
-
-    {% if youtube_id != blank %}
-      <div class="video-container">
-        <iframe src="https://www.youtube.com/embed/{{ youtube_id }}"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen></iframe>
-      </div>
-
-    {% elsif block.settings.video_url contains "vimeo.com" %}
-      <div class="video-container">
-        <iframe src="https://player.vimeo.com/video/{{ block.settings.video_url | split: '/' | last | split: '?' | first }}"
-          frameborder="0"
-          allow="autoplay; fullscreen; picture-in-picture"
-          allowfullscreen></iframe>
-      </div>
-
-    {% elsif block.settings.shopify_video != blank %}
-      <div class="video-container">
-        {{ block.settings.shopify_video | video_tag: controls: true, autoplay: false, muted: false, loop: false }}
-      </div>
-
-    {% else %}
-      <div style="padding:40px; text-align:center; color:#777; font-size:16px; border:2px dashed #ccc; border-radius:12px;">
-        🎥 Add a YouTube/Vimeo link or upload a Shopify video to display here.
-      </div>
-    {% endif %}
-  </div>
-</div>
-
 <style>
-.video-section {
-  text-align: center;
-}
-
+.video-section { text-align: center; }
 .video-heading {
   font-weight: bold;
   margin-bottom: 20px;
 }
-
 .video-wrapper {
   display: flex;
   justify-content: center;
   width: 100%;
 }
-
 .video-container {
   position: relative;
   width: 100%;
@@ -87,7 +98,6 @@
   overflow: hidden;
   border-radius: 12px;
 }
-
 .video-container iframe,
 .video-container video {
   position: absolute;
@@ -101,13 +111,24 @@
 }
 </style>
 
-
-
 {% schema %}
 {
   "name": "Video Section",
   "target": "section",
   "settings": [
+    {
+      "type": "select",
+      "id": "visibility",
+      "label": "Show this section on",
+      "options": [
+        { "value": "all", "label": "All pages" },
+        { "value": "home", "label": "Homepage only" },
+        { "value": "product", "label": "Product pages only" },
+        { "value": "collection", "label": "Collection pages only" },
+        { "value": "page", "label": "Custom pages only" }
+      ],
+      "default": "home"
+    },
     {
       "type": "text",
       "id": "heading",

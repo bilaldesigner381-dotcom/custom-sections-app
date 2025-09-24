@@ -69,7 +69,13 @@
                 </div>
               {% endif %}
 
-              <a href="{{ product.url }}" class="buy-now-btn">Buy Now</a>
+              <a href="{{ product.url }}" 
+   class="buy-now-btn" 
+   style="background: {{ block.settings.button_bg_color }}; 
+          color: {{ block.settings.button_text_color }}">
+  {{ block.settings.button_text }}
+</a>
+
             </div>
             
             <!-- Right Image -->
@@ -115,6 +121,7 @@
   scroll-behavior: smooth;
   padding-bottom: 15px;
 }
+
 
 .product-wrapper.slider-active::-webkit-scrollbar {
   height: 8px;
@@ -208,16 +215,20 @@
   cursor: pointer;
   border: 1px solid #ccc;
 }
-
 .buy-now-btn {
   display: inline-block;
   padding: 6px 12px;
   border-radius: 6px;
-  background: #eee;
   font-size: 14px;
   text-decoration: none;
   transition: 0.3s;
 }
+
+.buy-now-btn:hover {
+  background: {{ block.settings.button_bg_color }};
+  color: #000 !important;
+}
+
 </style>
 
 <script>
@@ -272,7 +283,7 @@ document.addEventListener("DOMContentLoaded", function () {
         { "value": "collection", "label": "Collection pages only" },
         { "value": "page", "label": "Custom pages only" }
       ],
-      "default": "page"
+      "default": "home"
     },
     {
       "type": "collection",
@@ -319,6 +330,24 @@ document.addEventListener("DOMContentLoaded", function () {
       "max": 100,
       "step": 5,
       "default": 40
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Buy Now"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button Background Color",
+      "default": "#eee"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text Color",
+      "default": "#000000"
     },
     {
       "type": "range",

@@ -1,6 +1,5 @@
 import { redirect } from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
-import { login } from "../../shopify.server";
+import { useLoaderData } from "@remix-run/react";
 import styles from "./styles.module.css";
 
 export const loader = async ({ request }) => {
@@ -11,45 +10,28 @@ export const loader = async ({ request }) => {
     throw redirect(`/app?${url.searchParams.toString()}`);
   }
 
-  return { showForm: Boolean(login) };
+  return { ready: true };
 };
 
 export default function App() {
-  const { showForm } = useLoaderData();
+  const { ready } = useLoaderData();
 
   return (
     <div className={styles.index}>
       <div className={styles.content}>
-        <h1 className={styles.heading}>Welcome to Section Master! 🚀</h1>
+        <h1 className={styles.heading}>Welcome to Section Master 🚀</h1>
         <p className={styles.text}>
-          Transform your Shopify store with powerful custom sections and drag-and-drop functionality.
+          Easily transform your Shopify store with powerful custom sections and
+          drag-and-drop functionality.
         </p>
-        
-        {showForm && (
-          <div className={styles.onboarding}>
-            <h2>Get Started in 3 Simple Steps:</h2>
-            <ol className={styles.steps}>
-              <li>Enter your Shopify store domain</li>
-              <li>Grant necessary permissions</li>
-              <li>Start creating amazing sections!</li>
-            </ol>
 
-            <Form className={styles.form} method="post" action="/auth/login">
-              <label className={styles.label}>
-                <span>Your Shopify Store Domain</span>
-                <input 
-                  className={styles.input} 
-                  type="text" 
-                  name="shop" 
-                  placeholder="your-store.myshopify.com"
-                  required
-                />
-                <span className={styles.hint}>e.g: my-shop-domain.myshopify.com</span>
-              </label>
-              <button className={styles.button} type="submit">
-                🚀 Install Section Master
-              </button>
-            </Form>
+        {ready && (
+          <div className={styles.onboarding}>
+            <h2>Install in One Click</h2>
+            <p>Click below to add Section Master to your Shopify store.</p>
+            <a href="/auth/login" className={styles.button}>
+              🚀 Install Section Master
+            </a>
           </div>
         )}
 
@@ -57,20 +39,30 @@ export default function App() {
           <h2>Why Choose Section Master?</h2>
           <ul className={styles.list}>
             <li>
-              <strong>🎨 Drag & Drop Builder</strong> - Create beautiful sections without coding
+              <strong>🎨 Drag & Drop Builder</strong> – Build beautiful sections without coding
             </li>
             <li>
-              <strong>⚡ Lightning Fast</strong> - Optimized for performance and SEO
+              <strong>⚡ Lightning Fast</strong> – Optimized for performance and SEO
             </li>
             <li>
-              <strong>📱 Mobile Responsive</strong> - Perfect on all devices
+              <strong>📱 Mobile Responsive</strong> – Works perfectly on all devices
             </li>
             <li>
-              <strong>🛠️ Easy Customization</strong> - Change styles with click
+              <strong>🛠️ Easy Customization</strong> – Change styles in just a click
             </li>
           </ul>
         </div>
       </div>
+
+      <footer className={styles.footer}>
+        <nav className={styles.links}>
+          <a href="/privacy-policy">Privacy Policy</a> |{" "}
+          <a href="/terms-of-service">Terms of Service</a> |{" "}
+          <a href="/support">Support</a> |{" "}
+          <a href="/user-guide">User Guide</a>
+        </nav>
+      </footer>
     </div>
   );
 }
+

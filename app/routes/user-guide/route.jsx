@@ -15,19 +15,21 @@ export default function UserGuide() {
       ],
       image: "/images/announcement-countdown.png"
     },
-    {
-      id: 2,
-      title: "Hero Banner Slider",
-      icon: "🎠",
-      description: "Create a sliding hero banner with multiple images and promotional text.",
-      features: [
-        "Multiple slide support with smooth transitions",
-        "Customizable slide duration and animation effects",
-        "Mobile-responsive design",
-        "Call-to-action buttons on each slide"
-      ],
-      image: "/images/hero-banner-slider.png"
-    },
+   {
+  id: 2,
+  title: "Hero Banner Slider",
+  icon: "🎠",
+  description: "Create a visually engaging hero banner slider for your store. This section allows you to display multiple images with a text area for promotions or highlights.",
+  features: [
+    "Left side text area: Add Heading, Sub-heading, and Button",
+    "Right side main image with 6 smaller thumbnail images below",
+    "Hover on any thumbnail changes the main image instantly",
+    "Responsive text sizes: Customize fonts for mobile and desktop separately",
+    "Customize text color, button style, and background color or image",
+    "Perfect for highlighting new products, offers, or featured collections"
+  ],
+  image: "/images/hero-banner-slider.png"
+},
     {
       id: 3,
       title: "Featured Product",

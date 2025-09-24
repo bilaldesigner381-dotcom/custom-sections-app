@@ -28,7 +28,7 @@ export default function UserGuide() {
     "Customize text color, button style, and background color or image",
     "Perfect for highlighting new products, offers, or featured collections"
   ],
-  image: "/images/hero-banner-slider.png"
+  image: "/images/hero-banner.png"
 },
     {
       id: 3,

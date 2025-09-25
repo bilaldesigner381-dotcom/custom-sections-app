@@ -155,79 +155,43 @@ export default function UserGuide() {
         },
       ],
     },
-    {
+   {
   id: 5,
   title: "Instagram Gallery",
   icon: "📸",
-  description: "Showcase your Instagram feed directly on your store. Display up to 10 images with a link to your Instagram profile.",
+  description: "Showcase your Instagram feed directly on your store with the Instagram Gallery section. This section allows merchants to display up to 10 images and link to their Instagram profile.",
   features: [
-    "Upload up to 10 images from your Instagram feed",
-    "Add Instagram profile link for followers",
-    "Customizable grid layout and spacing",
-    "Mobile-responsive design",
-    "Easy image management and reordering"
+    "📸 Upload up to 10 images from your Instagram feed",
+    "🔗 Add your Instagram profile link at the end of the gallery", 
+    "🎨 Customize layout and spacing for a clean grid design",
+    "📱 Mobile responsive — looks great on all devices"
   ],
-  configurationSteps: [
-    {
-      step: 1,
-      instruction: "Click on Add Image to upload up to 10 images"
-    },
-    {
-      step: 2, 
-      instruction: "Rearrange the order of images as needed"
-    },
-    {
-      step: 3,
-      instruction: "Enter your Instagram Profile URL at the bottom"
-    },
-    {
-      step: 4,
-      instruction: "Save and preview the gallery on your store"
-    }
-  ],
-  specifications: [
-    {
-      icon: "🖼️",
-      label: "Max Images",
-      value: "10"
-    },
-    {
-      icon: "📐",
-      label: "Layout",
-      value: "Grid"
-    },
-    {
-      icon: "📱",
-      label: "Responsive",
-      value: "Yes"
-    },
-    {
-      icon: "🔗",
-      label: "Profile Link",
-      value: "Optional"
-    }
-  ],
-  benefits: [
-    "Increase social media engagement",
-    "Showcase user-generated content", 
-    "Build brand authenticity",
-    "Drive Instagram followers"
-  ],
+  configuration: true,
   image: "/images/instagram-gallery.png"
-},
+}
+,
     {
-      id: 6,
-      title: "Contact Map",
-      icon: "🗺️",
-      description: "Add a Google map with your business address and contact form.",
-      features: [
-        "Google Maps integration",
-        "Custom marker and map style",
-        "Embedded contact form",
-        "Business hours display"
-      ],
-      image: "/images/contact-map.png"
-    },
+  id: 6,
+  title: "Contact Map",
+  icon: "🗺️",
+  description: "Display a Google Map along with a contact form. Merchants can add either a Google Map Embed URL for direct display or a simple Google Map Link that opens in a new tab.",
+  features: [
+    "Embed URL: Map displays directly on your store",
+    "Simple Link: Opens map in new tab when clicked", 
+    "Customizable heading, subheading, and button text",
+    "Adjustable font sizes and background colors",
+    "Flexible section padding controls"
+  ],
+  proTip: "Make sure your embed URL format looks like: https://www.google.com/maps/embed?pb=... and your link format looks like: https://goo.gl/maps/xyz",
+  configuration: [
+    "Choose between Embed URL or Simple Map Link",
+    "Customize heading, subheading, and contact form labels",
+    "Adjust font sizes and background colors as needed",
+    "Set section padding for optimal spacing",
+    "Add your business address and contact information"
+  ],
+  image: "/images/contact-map.png"
+},
     {
       id: 7,
       title: "Logo Carousel",
@@ -482,7 +446,114 @@ export default function UserGuide() {
               </section>
             ))}
           </div>
+<section key={section.id} className={styles.sectionCard}>
+  <div className={styles.sectionHeader}>
+    <div className={styles.sectionIcon}>{section.icon}</div>
+    <div>
+      <h2 className={styles.sectionTitle}>
+        {section.id}. {section.title}
+      </h2>
+      <p className={styles.sectionDescription}>{section.description}</p>
+    </div>
+  </div>
 
+  <div className={styles.sectionFeatures}>
+    <h4>✨ Features</h4>
+    <ul className={styles.featuresList}>
+      {section.features.map((feature, index) => (
+        <li key={index} className={styles.featureItem}>
+          {feature}
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  {section.configuration && (
+    <div className={styles.configurationSection}>
+      <h4>⚙️ Steps to Configure</h4>
+      <ol className={styles.configurationList}>
+        {section.configuration.map((step, index) => (
+          <li key={index} className={styles.configurationStep}>
+            {step}
+          </li>
+        ))}
+      </ol>
+    </div>
+  )}
+
+  <div className={styles.sectionImage}>
+    <img 
+      src={section.image} 
+      alt={section.title}
+      className={styles.image}
+    />
+    <div className={styles.imageCaption}>
+      Example layout of {section.title} section
+    </div>
+  </div>
+</section>
+
+<section key={section.id} className={styles.sectionCard}>
+  <div className={styles.sectionHeader}>
+    <div className={styles.sectionIcon}>{section.icon}</div>
+    <div>
+      <h2 className={styles.sectionTitle}>
+        {section.id}. {section.title}
+      </h2>
+      <p className={styles.sectionDescription}>{section.description}</p>
+    </div>
+  </div>
+
+  <div className={styles.sectionFeatures}>
+    <h4>✨ Features</h4>
+    <ul className={styles.featuresList}>
+      {section.features.map((feature, index) => (
+        <li key={index} className={styles.featureItem}>
+          {feature}
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  {section.configuration && (
+    <div className={styles.configurationSection}>
+      <h4>⚙️ Configuration Options</h4>
+      <ul className={styles.featuresList}>
+        {section.configuration.map((step, index) => (
+          <li key={index} className={styles.featureItem}>
+            {step}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+
+  {section.proTip && (
+    <div className={styles.proTip}>
+      <div className={styles.proTipIcon}>💡</div>
+      <div>
+        <strong>Pro Tip:</strong> {section.proTip}
+      </div>
+    </div>
+  )}
+
+  <div className={styles.sectionImage}>
+    <img 
+      src={section.image} 
+      alt={section.title}
+      className={styles.image}
+    />
+    <div className={styles.imageCaption}>
+      Example of the {section.title} Section
+    </div>
+  </div>
+
+  <div className={styles.supportLink}>
+    <a href="/support" className={styles.supportButton}>
+      Need Help? Contact Support →
+    </a>
+  </div>
+</section>
           {/* Help section */}
           <div className={styles.helpSection}>
             <div className={styles.helpCard}>

@@ -6,149 +6,132 @@ export default function UserGuide() {
       id: 1,
       title: "Announcement Countdown",
       icon: "🕒",
-      description: "Add an announcement bar with a countdown timer to grab customer attention for sales, offers, or events.",
+      description:
+        "Add an announcement bar with a countdown timer to grab customer attention for sales, offers, or events.",
       features: [
         "Set end date and time in format: 2025-12-31T23:59:59",
         "Adjust font size for timer and announcement text",
         "Customize text color, background color, or background image",
-        "Perfect for promotions and limited-time offers"
+        "Perfect for promotions and limited-time offers",
       ],
-      image: "/images/announcement-countdown.png"
+      image: "/images/announcement-countdown.png",
     },
-   {
-  id: 2,
-  title: "Hero Banner Slider",
-  icon: "🎠",
-  description: "Create a visually engaging hero banner slider for your store. This section allows you to display multiple images with a text area for promotions or highlights.",
-  features: [
-    "Left side text area: Add Heading, Sub-heading, and Button",
-    "Right side main image with 6 smaller thumbnail images below",
-    "Hover on any thumbnail changes the main image instantly",
-    "Responsive text sizes: Customize fonts for mobile and desktop separately",
-    "Customize text color, button style, and background color or image",
-    "Perfect for highlighting new products, offers, or featured collections"
-  ],
-  image: "/images/hero.png"
-},
+    {
+      id: 2,
+      title: "Hero Banner Slider",
+      icon: "🎠",
+      description:
+        "Create a visually engaging hero banner slider for your store. This section allows you to display multiple images with a text area for promotions or highlights.",
+      features: [
+        "Left side text area: Add Heading, Sub-heading, and Button",
+        "Right side main image with 6 smaller thumbnail images below",
+        "Hover on any thumbnail changes the main image instantly",
+        "Responsive text sizes: Customize fonts for mobile and desktop separately",
+        "Customize text color, button style, and background color or image",
+        "Perfect for highlighting new products, offers, or featured collections",
+      ],
+      image: "/images/hero.png",
+    },
     {
       id: 3,
       title: "Featured Product",
       icon: "⭐",
-      description: "Highlight products on your store with the Featured Product section. Display single products or multiple products in a slider.",
+      description:
+        "Highlight products on your store with the Featured Product section. Display single products or multiple products in a slider.",
       features: [
         "Single Product mode: Showcase one product individually",
-        "Slider Mode: Display multiple products from a collection", 
+        "Slider Mode: Display multiple products from a collection",
         "Toggle between single product and slider layouts",
         "Customizable typography and colors",
-        "Flexible spacing and padding controls"
+        "Flexible spacing and padding controls",
       ],
       customization: [
         "Heading font size",
-        "Sub-heading font size", 
+        "Sub-heading font size",
         "Product price font size",
         "Button text customization",
         "Button font size",
         "Button background color",
         "Button text color",
         "Section background color",
-        "Section padding (spacing)"
+        "Section padding (spacing)",
       ],
       modes: [
         {
           name: "Single Product Mode",
           icon: "🛒",
-          description: "Select one product to showcase individually"
+          description: "Select one product to showcase individually",
         },
         {
-          name: "Slider Mode", 
+          name: "Slider Mode",
           icon: "🎠",
-          description: "Toggle slider ON and select a collection to display multiple products"
-        }
+          description:
+            "Toggle slider ON and select a collection to display multiple products",
+        },
       ],
       images: [
         {
           src: "/images/featured-product-single.png",
           alt: "Featured Product - Single",
-          caption: "Single Product Mode"
+          caption: "Single Product Mode",
         },
         {
           src: "/images/featured-product-slider.png",
           alt: "Featured Product - Slider",
-          caption: "Slider Mode" 
-        }
-      ]
+          caption: "Slider Mode",
+        },
+      ],
     },
     {
       id: 4,
       title: "Featured Collection",
       icon: "📦",
-      description: "Display an entire collection of products with variation swatches. Automatically shows all products from the selected collection.",
+      description:
+        "Display an entire collection of products with variation swatches. Automatically shows all products from the selected collection.",
       features: [
         "Variation swatches for color options",
         "Hover-to-update product images",
         "Responsive layout (3 per row desktop, 1 per row mobile)",
         "Toggle between grid and slider layouts",
-        "Automatic product loading from collections"
-      ],
-      functionalities: [
-        {
-          icon: "🖼️",
-          title: "Product Layout",
-          description: "Product image appears on the right side, with title, variation swatches, and Buy Now button on the left"
-        },
-        {
-          icon: "🎨", 
-          title: "Variation Swatches",
-          description: "Hover over color swatches to update product images with that variant"
-        },
-        {
-          icon: "💻",
-          title: "Responsive Layout",
-          description: "Three products per row on desktop, one product per row on mobile"
-        },
-        {
-          icon: "🎠",
-          title: "Slider Toggle",
-          description: "Toggle ON for carousel display, OFF for grid layout"
-        }
+        "Automatic product loading from collections",
       ],
       customization: [
         "Section title",
-        "Title font size", 
+        "Title font size",
         "Title color",
         "Background color",
         "Background image",
         "Margin top & bottom",
         "Button text",
         "Button background color",
-        "Button text color", 
+        "Button text color",
         "Section padding",
-        "Show products as slider toggle"
+        "Show products as slider toggle",
       ],
       layoutModes: [
         {
           name: "Grid Layout",
           description: "Products displayed in a responsive grid (slider OFF)",
-          toggleState: "OFF"
+          toggleState: "OFF",
         },
         {
-          name: "Slider Layout", 
+          name: "Slider Layout",
           description: "Products displayed in a carousel (slider ON)",
-          toggleState: "ON"
-        }
+          toggleState: "ON",
+        },
       ],
       images: [
         {
           src: "/images/featured-collection-grid.png",
           alt: "Featured Collection - Grid",
-          caption: "Grid Layout (Slider OFF)"
+          caption: "Grid Layout (Slider OFF)",
         },
         {
           src: "/images/featured-collection-slider.png",
           alt: "Featured Collection - Slider",
-          caption: "Slider Layout (Slider ON)" 
-        }
-      ]
+          caption: "Slider Layout (Slider ON)",
+        },
+      ],
     },
     {
       id: 5,
@@ -269,14 +252,15 @@ export default function UserGuide() {
     }
   ];
 
-  return (
+ return (
     <div className={styles.container}>
       <main className={styles.main}>
         <header className={styles.header}>
           <h1 className={styles.title}>User Guide</h1>
           <p className={styles.subtitle}>
-            Welcome to Section Master! 🚀 This comprehensive guide will walk you through 
-            each of the available sections and how to use them effectively in your Shopify store.
+            Welcome to Section Master! 🚀 This comprehensive guide will walk you
+            through each of the available sections and how to use them
+            effectively in your Shopify store.
           </p>
           <div className={styles.stats}>
             <div className={styles.stat}>
@@ -304,31 +288,89 @@ export default function UserGuide() {
                     <h2 className={styles.sectionTitle}>
                       {section.id}. {section.title}
                     </h2>
-                    <p className={styles.sectionDescription}>{section.description}</p>
+                    <p className={styles.sectionDescription}>
+                      {section.description}
+                    </p>
                   </div>
                 </div>
 
-                <div className={styles.sectionFeatures}>
-                  <h4>Key Features:</h4>
-                  <ul className={styles.featuresList}>
-                    {section.features.map((feature, index) => (
-                      <li key={index} className={styles.featureItem}>
-                        {feature}
-                      </li>
+                {section.features && (
+                  <div className={styles.sectionFeatures}>
+                    <h4>Key Features:</h4>
+                    <ul className={styles.featuresList}>
+                      {section.features.map((feature, index) => (
+                        <li key={index} className={styles.featureItem}>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {section.customization && (
+                  <div className={styles.sectionCustomization}>
+                    <h4>Customization Options:</h4>
+                    <ul>
+                      {section.customization.map((item, index) => (
+                        <li key={index}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {section.modes && (
+                  <div className={styles.sectionModes}>
+                    <h4>Modes:</h4>
+                    <ul>
+                      {section.modes.map((mode, index) => (
+                        <li key={index}>
+                          {mode.icon} <strong>{mode.name}</strong> –{" "}
+                          {mode.description}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {section.layoutModes && (
+                  <div className={styles.sectionModes}>
+                    <h4>Layout Modes:</h4>
+                    <ul>
+                      {section.layoutModes.map((layout, index) => (
+                        <li key={index}>
+                          <strong>{layout.name}</strong> ({layout.toggleState}) –
+                          {layout.description}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {section.images ? (
+                  <div className={styles.sectionImages}>
+                    {section.images.map((img, index) => (
+                      <figure key={index}>
+                        <img
+                          src={img.src}
+                          alt={img.alt}
+                          className={styles.image}
+                        />
+                        <figcaption>{img.caption}</figcaption>
+                      </figure>
                     ))}
-                  </ul>
-                </div>
-
-                <div className={styles.sectionImage}>
-                  <img 
-                    src={section.image} 
-                    alt={section.title}
-                    className={styles.image}
-                  />
-                  <div className={styles.imageCaption}>
-                    Preview of {section.title} section
                   </div>
-                </div>
+                ) : section.image ? (
+                  <div className={styles.sectionImage}>
+                    <img
+                      src={section.image}
+                      alt={section.title}
+                      className={styles.image}
+                    />
+                    <div className={styles.imageCaption}>
+                      Preview of {section.title} section
+                    </div>
+                  </div>
+                ) : null}
               </section>
             ))}
           </div>
@@ -339,14 +381,18 @@ export default function UserGuide() {
               <div className={styles.helpContent}>
                 <h3>Need More Help?</h3>
                 <p>
-                  If you need further assistance or have specific questions about any section, 
-                  our support team is here to help you succeed.
+                  If you need further assistance or have specific questions
+                  about any section, our support team is here to help you
+                  succeed.
                 </p>
                 <div className={styles.helpLinks}>
                   <a href="/support" className={styles.helpLink}>
                     📞 Contact Support
                   </a>
-                  <a href="mailto:support@sectionmasterapp.com" className={styles.helpLink}>
+                  <a
+                    href="mailto:support@sectionmasterapp.com"
+                    className={styles.helpLink}
+                  >
                     📧 Email Us
                   </a>
                 </div>

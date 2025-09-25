@@ -65,8 +65,7 @@ export default function UserGuide() {
         {
           name: "Slider Mode",
           icon: "🎠",
-          description:
-            "Toggle slider ON and select a collection to display multiple products",
+          description: "Toggle slider ON and select a collection to display multiple products",
         },
       ],
       images: [
@@ -94,6 +93,29 @@ export default function UserGuide() {
         "Responsive layout (3 per row desktop, 1 per row mobile)",
         "Toggle between grid and slider layouts",
         "Automatic product loading from collections",
+      ],
+      functionalities: [
+        {
+          icon: "🖼️",
+          title: "Product Layout",
+          description:
+            "Product image appears on the right side, with title, variation swatches, and Buy Now button on the left",
+        },
+        {
+          icon: "🎨",
+          title: "Variation Swatches",
+          description: "Hover over color swatches to update product images with that variant",
+        },
+        {
+          icon: "💻",
+          title: "Responsive Layout",
+          description: "Three products per row on desktop, one product per row on mobile",
+        },
+        {
+          icon: "🎠",
+          title: "Slider Toggle",
+          description: "Toggle ON for carousel display, OFF for grid layout",
+        },
       ],
       customization: [
         "Section title",
@@ -259,8 +281,8 @@ export default function UserGuide() {
           <h1 className={styles.title}>User Guide</h1>
           <p className={styles.subtitle}>
             Welcome to Section Master! 🚀 This comprehensive guide will walk you
-            through each of the available sections and how to use them
-            effectively in your Shopify store.
+            through each of the available sections and how to use them effectively in
+            your Shopify store.
           </p>
           <div className={styles.stats}>
             <div className={styles.stat}>
@@ -282,6 +304,7 @@ export default function UserGuide() {
           <div className={styles.sectionsGrid}>
             {sections.map((section) => (
               <section key={section.id} className={styles.sectionCard}>
+                {/* Section header */}
                 <div className={styles.sectionHeader}>
                   <div className={styles.sectionIcon}>{section.icon}</div>
                   <div>
@@ -294,12 +317,13 @@ export default function UserGuide() {
                   </div>
                 </div>
 
+                {/* Features */}
                 {section.features && (
                   <div className={styles.sectionFeatures}>
                     <h4>Key Features:</h4>
                     <ul className={styles.featuresList}>
-                      {section.features.map((feature, index) => (
-                        <li key={index} className={styles.featureItem}>
+                      {section.features.map((feature, idx) => (
+                        <li key={idx} className={styles.featureItem}>
                           {feature}
                         </li>
                       ))}
@@ -307,59 +331,96 @@ export default function UserGuide() {
                   </div>
                 )}
 
+                {/* Customization options */}
                 {section.customization && (
-                  <div className={styles.sectionCustomization}>
+                  <div className={styles.customizationSection}>
                     <h4>Customization Options:</h4>
-                    <ul>
-                      {section.customization.map((item, index) => (
-                        <li key={index}>{item}</li>
+                    <div className={styles.customizationGrid}>
+                      {section.customization.map((item, idx) => (
+                        <div key={idx} className={styles.customizationItem}>
+                          {item}
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   </div>
                 )}
 
+                {/* Modes (Featured Product) */}
                 {section.modes && (
-                  <div className={styles.sectionModes}>
-                    <h4>Modes:</h4>
-                    <ul>
-                      {section.modes.map((mode, index) => (
-                        <li key={index}>
-                          {mode.icon} <strong>{mode.name}</strong> –{" "}
-                          {mode.description}
-                        </li>
+                  <div className={styles.modesSection}>
+                    <h4>Display Modes:</h4>
+                    <div className={styles.modesGrid}>
+                      {section.modes.map((mode, idx) => (
+                        <div key={idx} className={styles.modeCard}>
+                          <span className={styles.modeIcon}>{mode.icon}</span>
+                          <div>
+                            <h5>{mode.name}</h5>
+                            <p>{mode.description}</p>
+                          </div>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   </div>
                 )}
 
+                {/* Functionalities (Featured Collection) */}
+                {section.functionalities && (
+                  <div className={styles.functionalitiesSection}>
+                    <h4>Functionalities:</h4>
+                    <div className={styles.functionalitiesGrid}>
+                      {section.functionalities.map((func, idx) => (
+                        <div key={idx} className={styles.functionalityCard}>
+                          <span className={styles.funcIcon}>{func.icon}</span>
+                          <div>
+                            <h5>{func.title}</h5>
+                            <p>{func.description}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Layout Modes (Featured Collection) */}
                 {section.layoutModes && (
-                  <div className={styles.sectionModes}>
+                  <div className={styles.layoutModesSection}>
                     <h4>Layout Modes:</h4>
-                    <ul>
-                      {section.layoutModes.map((layout, index) => (
-                        <li key={index}>
-                          <strong>{layout.name}</strong> ({layout.toggleState}) –
-                          {layout.description}
-                        </li>
+                    <div className={styles.layoutModesGrid}>
+                      {section.layoutModes.map((layout, idx) => (
+                        <div key={idx} className={styles.layoutModeCard}>
+                          <div className={styles.modeHeader}>
+                            <span className={styles.modeName}>{layout.name}</span>
+                            <span className={styles.toggleState}>
+                              {layout.toggleState}
+                            </span>
+                          </div>
+                          <p className={styles.modeDescription}>
+                            {layout.description}
+                          </p>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   </div>
                 )}
 
-                {section.images ? (
+                {/* Single or multiple images */}
+                {section.images && (
                   <div className={styles.sectionImages}>
-                    {section.images.map((img, index) => (
-                      <figure key={index}>
+                    {section.images.map((img, idx) => (
+                      <div key={idx} className={styles.imageContainer}>
                         <img
                           src={img.src}
                           alt={img.alt}
                           className={styles.image}
                         />
-                        <figcaption>{img.caption}</figcaption>
-                      </figure>
+                        <div className={styles.imageCaption}>{img.caption}</div>
+                      </div>
                     ))}
                   </div>
-                ) : section.image ? (
+                )}
+
+                {/* Fallback single image */}
+                {section.image && !section.images && (
                   <div className={styles.sectionImage}>
                     <img
                       src={section.image}
@@ -370,20 +431,20 @@ export default function UserGuide() {
                       Preview of {section.title} section
                     </div>
                   </div>
-                ) : null}
+                )}
               </section>
             ))}
           </div>
 
+          {/* Help section */}
           <div className={styles.helpSection}>
             <div className={styles.helpCard}>
               <div className={styles.helpIcon}>❓</div>
               <div className={styles.helpContent}>
                 <h3>Need More Help?</h3>
                 <p>
-                  If you need further assistance or have specific questions
-                  about any section, our support team is here to help you
-                  succeed.
+                  If you need further assistance or have specific questions about any
+                  section, our support team is here to help you succeed.
                 </p>
                 <div className={styles.helpLinks}>
                   <a href="/support" className={styles.helpLink}>

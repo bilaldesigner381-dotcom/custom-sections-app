@@ -182,14 +182,6 @@ export default function UserGuide() {
     "Adjustable font sizes and background colors",
     "Flexible section padding controls"
   ],
-  proTip: "Make sure your embed URL format looks like: https://www.google.com/maps/embed?pb=... and your link format looks like: https://goo.gl/maps/xyz",
-  configuration: [
-    "Choose between Embed URL or Simple Map Link",
-    "Customize heading, subheading, and contact form labels",
-    "Adjust font sizes and background colors as needed",
-    "Set section padding for optimal spacing",
-    "Add your business address and contact information"
-  ],
   image: "/images/contact-map.png"
 },
     {

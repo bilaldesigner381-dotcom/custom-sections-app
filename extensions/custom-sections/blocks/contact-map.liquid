@@ -55,7 +55,21 @@
 
     <div class="map-container">
       {% if block.settings.map_embed != blank %}
-        <iframe src="{{ block.settings.map_embed }}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        {% if block.settings.map_embed contains "embed" %}
+          <iframe 
+            src="{{ block.settings.map_embed }}" 
+            width="100%" 
+            height="100%" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy">
+          </iframe>
+        {% else %}
+          <a href="{{ block.settings.map_embed }}" target="_blank" rel="noopener" 
+             style="display:block; width:100%; height:100%; text-align:center; line-height:400px; background:#f4f4f4; border-radius:12px;">
+            📍 View Location on Google Maps
+          </a>
+        {% endif %}
       {% endif %}
     </div>
   </div>
@@ -176,7 +190,7 @@
     {
       "type": "url",
       "id": "map_embed",
-      "label": "Google Map Embed URL"
+      "label": "Google Map Link or Embed URL"
     },
     {
       "type": "color",

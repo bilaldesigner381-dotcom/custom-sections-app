@@ -34,27 +34,121 @@ export default function UserGuide() {
       id: 3,
       title: "Featured Product",
       icon: "⭐",
-      description: "Highlight a single featured product with image, price, and buy button.",
+      description: "Highlight products on your store with the Featured Product section. Display single products or multiple products in a slider.",
       features: [
-        "Direct product selection from your store",
-        "Customizable product card layout",
-        "Quick add-to-cart functionality",
-        "Price and variant display"
+        "Single Product mode: Showcase one product individually",
+        "Slider Mode: Display multiple products from a collection", 
+        "Toggle between single product and slider layouts",
+        "Customizable typography and colors",
+        "Flexible spacing and padding controls"
       ],
-      image: "/images/featured-product.png"
+      customization: [
+        "Heading font size",
+        "Sub-heading font size", 
+        "Product price font size",
+        "Button text customization",
+        "Button font size",
+        "Button background color",
+        "Button text color",
+        "Section background color",
+        "Section padding (spacing)"
+      ],
+      modes: [
+        {
+          name: "Single Product Mode",
+          icon: "🛒",
+          description: "Select one product to showcase individually"
+        },
+        {
+          name: "Slider Mode", 
+          icon: "🎠",
+          description: "Toggle slider ON and select a collection to display multiple products"
+        }
+      ],
+      images: [
+        {
+          src: "/images/featured-product-single.png",
+          alt: "Featured Product - Single",
+          caption: "Single Product Mode"
+        },
+        {
+          src: "/images/featured-product-slider.png",
+          alt: "Featured Product - Slider",
+          caption: "Slider Mode" 
+        }
+      ]
     },
     {
       id: 4,
       title: "Featured Collection",
       icon: "📦",
-      description: "Display an entire product collection in a visually appealing grid.",
+      description: "Display an entire collection of products with variation swatches. Automatically shows all products from the selected collection.",
       features: [
-        "Grid or carousel layout options",
-        "Customizable number of products to show",
-        "Quick view and add-to-cart",
-        "Collection filtering and sorting"
+        "Variation swatches for color options",
+        "Hover-to-update product images",
+        "Responsive layout (3 per row desktop, 1 per row mobile)",
+        "Toggle between grid and slider layouts",
+        "Automatic product loading from collections"
       ],
-      image: "/images/featured-collection.png"
+      functionalities: [
+        {
+          icon: "🖼️",
+          title: "Product Layout",
+          description: "Product image appears on the right side, with title, variation swatches, and Buy Now button on the left"
+        },
+        {
+          icon: "🎨", 
+          title: "Variation Swatches",
+          description: "Hover over color swatches to update product images with that variant"
+        },
+        {
+          icon: "💻",
+          title: "Responsive Layout",
+          description: "Three products per row on desktop, one product per row on mobile"
+        },
+        {
+          icon: "🎠",
+          title: "Slider Toggle",
+          description: "Toggle ON for carousel display, OFF for grid layout"
+        }
+      ],
+      customization: [
+        "Section title",
+        "Title font size", 
+        "Title color",
+        "Background color",
+        "Background image",
+        "Margin top & bottom",
+        "Button text",
+        "Button background color",
+        "Button text color", 
+        "Section padding",
+        "Show products as slider toggle"
+      ],
+      layoutModes: [
+        {
+          name: "Grid Layout",
+          description: "Products displayed in a responsive grid (slider OFF)",
+          toggleState: "OFF"
+        },
+        {
+          name: "Slider Layout", 
+          description: "Products displayed in a carousel (slider ON)",
+          toggleState: "ON"
+        }
+      ],
+      images: [
+        {
+          src: "/images/featured-collection-grid.png",
+          alt: "Featured Collection - Grid",
+          caption: "Grid Layout (Slider OFF)"
+        },
+        {
+          src: "/images/featured-collection-slider.png",
+          alt: "Featured Collection - Slider",
+          caption: "Slider Layout (Slider ON)" 
+        }
+      ]
     },
     {
       id: 5,

@@ -13,23 +13,25 @@ export default function UserGuide() {
         "Customize text color, background color, or background image",
         "Perfect for promotions and limited-time offers"
       ],
-      image: "/images/announcement-countdown.png"
+      image: "/images/announcement-countdown.png",
+      category: "Promotional"
     },
-   {
-  id: 2,
-  title: "Hero Banner Slider",
-  icon: "🎠",
-  description: "Create a visually engaging hero banner slider for your store. This section allows you to display multiple images with a text area for promotions or highlights.",
-  features: [
-    "Left side text area: Add Heading, Sub-heading, and Button",
-    "Right side main image with 6 smaller thumbnail images below",
-    "Hover on any thumbnail changes the main image instantly",
-    "Responsive text sizes: Customize fonts for mobile and desktop separately",
-    "Customize text color, button style, and background color or image",
-    "Perfect for highlighting new products, offers, or featured collections"
-  ],
-  image: "/images/hero.png"
-},
+    {
+      id: 2,
+      title: "Hero Banner Slider",
+      icon: "🎠",
+      description: "Create a visually engaging hero banner slider for your store. This section allows you to display multiple images with a text area for promotions or highlights.",
+      features: [
+        "Left side text area: Add Heading, Sub-heading, and Button",
+        "Right side main image with 6 smaller thumbnail images below",
+        "Hover on any thumbnail changes the main image instantly",
+        "Responsive text sizes: Customize fonts for mobile and desktop separately",
+        "Customize text color, button style, and background color or image",
+        "Perfect for highlighting new products, offers, or featured collections"
+      ],
+      image: "/images/hero.png",
+      category: "Hero"
+    },
     {
       id: 3,
       title: "Featured Product",
@@ -76,7 +78,8 @@ export default function UserGuide() {
           alt: "Featured Product - Slider",
           caption: "Slider Mode" 
         }
-      ]
+      ],
+      category: "Product Display"
     },
     {
       id: 4,
@@ -148,7 +151,8 @@ export default function UserGuide() {
           alt: "Featured Collection - Slider",
           caption: "Slider Layout (Slider ON)" 
         }
-      ]
+      ],
+      category: "Product Display"
     },
     {
       id: 5,
@@ -161,7 +165,8 @@ export default function UserGuide() {
         "Click to view full image",
         "Social media engagement boost"
       ],
-      image: "/images/instagram-gallery.png"
+      image: "/images/instagram-gallery.png",
+      category: "Social Media"
     },
     {
       id: 6,
@@ -174,7 +179,8 @@ export default function UserGuide() {
         "Embedded contact form",
         "Business hours display"
       ],
-      image: "/images/contact-map.png"
+      image: "/images/contact-map.png",
+      category: "Contact"
     },
     {
       id: 7,
@@ -187,7 +193,8 @@ export default function UserGuide() {
         "Logo size and spacing controls",
         "Clickable logos with custom links"
       ],
-      image: "/images/logo-carousel.png"
+      image: "/images/logo-carousel.png",
+      category: "Branding"
     },
     {
       id: 8,
@@ -200,7 +207,8 @@ export default function UserGuide() {
         "Search functionality",
         "Category organization"
       ],
-      image: "/images/faq-accordion.png"
+      image: "/images/faq-accordion.png",
+      category: "Support"
     },
     {
       id: 9,
@@ -213,7 +221,8 @@ export default function UserGuide() {
         "Carousel or grid layout",
         "Automatic rotation option"
       ],
-      image: "/images/testimonials.png"
+      image: "/images/testimonials.png",
+      category: "Social Proof"
     },
     {
       id: 10,
@@ -226,7 +235,8 @@ export default function UserGuide() {
         "Customizable success message",
         "GDPR compliance options"
       ],
-      image: "/images/newsletter-signup.png"
+      image: "/images/newsletter-signup.png",
+      category: "Marketing"
     },
     {
       id: 11,
@@ -239,7 +249,8 @@ export default function UserGuide() {
         "Hover effects and animations",
         "Call-to-action buttons"
       ],
-      image: "/images/services-feature.png"
+      image: "/images/services-feature.png",
+      category: "Services"
     },
     {
       id: 12,
@@ -252,7 +263,8 @@ export default function UserGuide() {
         "Autoplay and loop controls",
         "Responsive video player"
       ],
-      image: "/images/video-section.png"
+      image: "/images/video-section.png",
+      category: "Media"
     },
     {
       id: 13,
@@ -265,89 +277,176 @@ export default function UserGuide() {
         "Pre-defined message templates",
         "Mobile-optimized experience"
       ],
-      image: "/images/sticky-whatsapp.png"
+      image: "/images/sticky-whatsapp.png",
+      category: "Communication"
     }
   ];
+
+  // Group sections by category for better organization
+  const categories = sections.reduce((acc, section) => {
+    if (!acc[section.category]) {
+      acc[section.category] = [];
+    }
+    acc[section.category].push(section);
+    return acc;
+  }, {});
 
   return (
     <div className={styles.container}>
       <main className={styles.main}>
         <header className={styles.header}>
-          <h1 className={styles.title}>User Guide</h1>
-          <p className={styles.subtitle}>
-            Welcome to Section Master! 🚀 This comprehensive guide will walk you through 
-            each of the available sections and how to use them effectively in your Shopify store.
-          </p>
-          <div className={styles.stats}>
-            <div className={styles.stat}>
-              <span className={styles.statNumber}>13</span>
-              <span className={styles.statLabel}>Sections</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statNumber}>100%</span>
-              <span className={styles.statLabel}>Customizable</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statNumber}>🎯</span>
-              <span className={styles.statLabel}>Easy to Use</span>
+          <div className={styles.headerContent}>
+            <h1 className={styles.title}>Section Master User Guide</h1>
+            <p className={styles.subtitle}>
+              Welcome to Section Master! 🚀 This comprehensive guide will walk you through 
+              each of the available sections and how to use them effectively in your Shopify store.
+            </p>
+            <div className={styles.stats}>
+              <div className={styles.stat}>
+                <span className={styles.statNumber}>13</span>
+                <span className={styles.statLabel}>Sections</span>
+              </div>
+              <div className={styles.stat}>
+                <span className={styles.statNumber}>100%</span>
+                <span className={styles.statLabel}>Customizable</span>
+              </div>
+              <div className={styles.stat}>
+                <span className={styles.statNumber}>🎯</span>
+                <span className={styles.statLabel}>Easy to Use</span>
+              </div>
+              <div className={styles.stat}>
+                <span className={styles.statNumber}>📱</span>
+                <span className={styles.statLabel}>Responsive</span>
+              </div>
             </div>
           </div>
         </header>
 
         <div className={styles.content}>
-          <div className={styles.sectionsGrid}>
-            {sections.map((section) => (
-              <section key={section.id} className={styles.sectionCard}>
-                <div className={styles.sectionHeader}>
-                  <div className={styles.sectionIcon}>{section.icon}</div>
-                  <div>
-                    <h2 className={styles.sectionTitle}>
-                      {section.id}. {section.title}
-                    </h2>
-                    <p className={styles.sectionDescription}>{section.description}</p>
-                  </div>
-                </div>
+          {/* Quick Navigation */}
+          <nav className={styles.quickNav}>
+            <h3>Quick Navigation</h3>
+            <div className={styles.navLinks}>
+              {sections.map(section => (
+                <a key={section.id} href={`#section-${section.id}`} className={styles.navLink}>
+                  {section.icon} {section.title}
+                </a>
+              ))}
+            </div>
+          </nav>
 
-                <div className={styles.sectionFeatures}>
-                  <h4>Key Features:</h4>
-                  <ul className={styles.featuresList}>
-                    {section.features.map((feature, index) => (
-                      <li key={index} className={styles.featureItem}>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+          {/* Sections by Category */}
+          {Object.entries(categories).map(([category, categorySections]) => (
+            <div key={category} className={styles.categorySection}>
+              <h2 className={styles.categoryTitle}>{category}</h2>
+              <div className={styles.sectionsGrid}>
+                {categorySections.map((section) => (
+                  <section key={section.id} id={`section-${section.id}`} className={styles.sectionCard}>
+                    <div className={styles.sectionHeader}>
+                      <div className={styles.sectionMeta}>
+                        <div className={styles.sectionIcon}>{section.icon}</div>
+                        <span className={styles.sectionBadge}>Section {section.id}</span>
+                      </div>
+                      <div>
+                        <h2 className={styles.sectionTitle}>{section.title}</h2>
+                        <p className={styles.sectionDescription}>{section.description}</p>
+                      </div>
+                    </div>
 
-                <div className={styles.sectionImage}>
-                  <img 
-                    src={section.image} 
-                    alt={section.title}
-                    className={styles.image}
-                  />
-                  <div className={styles.imageCaption}>
-                    Preview of {section.title} section
-                  </div>
-                </div>
-              </section>
-            ))}
-          </div>
+                    <div className={styles.sectionFeatures}>
+                      <h4>✨ Key Features</h4>
+                      <ul className={styles.featuresList}>
+                        {section.features.map((feature, index) => (
+                          <li key={index} className={styles.featureItem}>
+                            <span className={styles.featureIcon}>✓</span>
+                            {feature}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
 
+                    {/* Enhanced Content for Specific Sections */}
+                    {section.id === 3 && (
+                      <div className={styles.enhancedContent}>
+                        <div className={styles.modesSection}>
+                          <h5>🎛️ Display Modes</h5>
+                          <div className={styles.modesGrid}>
+                            {section.modes.map((mode, index) => (
+                              <div key={index} className={styles.modeCard}>
+                                <div className={styles.modeIcon}>{mode.icon}</div>
+                                <div>
+                                  <h6>{mode.name}</h6>
+                                  <p>{mode.description}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {section.id === 4 && (
+                      <div className={styles.enhancedContent}>
+                        <div className={styles.functionalitiesSection}>
+                          <h5>⚙️ Functionalities</h5>
+                          <div className={styles.functionalitiesGrid}>
+                            {section.functionalities.map((func, index) => (
+                              <div key={index} className={styles.functionalityCard}>
+                                <div className={styles.funcIcon}>{func.icon}</div>
+                                <div>
+                                  <h6>{func.title}</h6>
+                                  <p>{func.description}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className={styles.sectionPreview}>
+                      <img 
+                        src={section.image} 
+                        alt={section.title}
+                        className={styles.previewImage}
+                      />
+                      <div className={styles.previewCaption}>
+                        {section.title} Preview
+                      </div>
+                    </div>
+
+                    <div className={styles.sectionActions}>
+                      <button className={styles.actionButton}>
+                        📖 Read Documentation
+                      </button>
+                      <button className={styles.actionButton}>
+                        🎬 Watch Tutorial
+                      </button>
+                    </div>
+                  </section>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          {/* Help Section */}
           <div className={styles.helpSection}>
             <div className={styles.helpCard}>
-              <div className={styles.helpIcon}>❓</div>
+              <div className={styles.helpHeader}>
+                <div className={styles.helpIcon}>💫</div>
+                <h3>Ready to Transform Your Store?</h3>
+              </div>
               <div className={styles.helpContent}>
-                <h3>Need More Help?</h3>
                 <p>
-                  If you need further assistance or have specific questions about any section, 
-                  our support team is here to help you succeed.
+                  Need help implementing these sections or have specific customization requests? 
+                  Our support team is here to help you succeed.
                 </p>
                 <div className={styles.helpLinks}>
-                  <a href="/support" className={styles.helpLink}>
-                    📞 Contact Support
+                  <a href="/support" className={styles.primaryLink}>
+                    📞 Get Instant Support
                   </a>
-                  <a href="mailto:support@sectionmasterapp.com" className={styles.helpLink}>
-                    📧 Email Us
+                  <a href="mailto:support@sectionmasterapp.com" className={styles.secondaryLink}>
+                    📧 Email Our Experts
                   </a>
                 </div>
               </div>

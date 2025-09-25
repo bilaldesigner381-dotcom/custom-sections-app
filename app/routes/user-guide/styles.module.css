@@ -28,6 +28,196 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+/* Instagram Gallery Specific Styles */
+.specificationsSection {
+  background: #f0fdf4;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #22c55e;
+}
+
+.specificationsSection h4 {
+  color: #15803d;
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.specificationsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.specCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #bbf7d0;
+}
+
+.specIcon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.specInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.specLabel {
+  color: #15803d;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.specValue {
+  color: #22c55e;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.configurationSection {
+  background: #fffbeb;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #f59e0b;
+}
+
+.configurationSection h4 {
+  color: #92400e;
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.stepsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.stepCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #fcd34d;
+}
+
+.stepNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #f59e0b;
+  color: white;
+  border-radius: 50%;
+  font-size: 0.9rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.stepInstruction {
+  color: #92400e;
+  font-size: 1rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.benefitsSection {
+  background: #faf5ff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #a855f7;
+}
+
+.benefitsSection h4 {
+  color: #7e22ce;
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.benefitCard {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #d8b4fe;
+  color: #7e22ce;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.benefitIcon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* Enhanced usage tip for Instagram */
+.instagramTip {
+  background: linear-gradient(135deg, #fdf2f8, #fce7f3);
+  border-left: 4px solid #ec4899;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .specificationsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .benefitsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stepCard {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+  
+  .specCard {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  
+  .benefitCard {
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .specificationsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stepCard {
+    padding: 1rem;
+  }
+}
 
 .subtitle {
   font-size: 1.3rem;

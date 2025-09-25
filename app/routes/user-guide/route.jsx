@@ -156,18 +156,65 @@ export default function UserGuide() {
       ],
     },
     {
-      id: 5,
-      title: "Instagram Gallery",
-      icon: "📸",
-      description: "Showcase your Instagram feed directly on your store for social proof.",
-      features: [
-        "Automatic Instagram feed integration",
-        "Customizable grid layout",
-        "Click to view full image",
-        "Social media engagement boost"
-      ],
-      image: "/images/instagram-gallery.png"
+  id: 5,
+  title: "Instagram Gallery",
+  icon: "📸",
+  description: "Showcase your Instagram feed directly on your store. Display up to 10 images with a link to your Instagram profile.",
+  features: [
+    "Upload up to 10 images from your Instagram feed",
+    "Add Instagram profile link for followers",
+    "Customizable grid layout and spacing",
+    "Mobile-responsive design",
+    "Easy image management and reordering"
+  ],
+  configurationSteps: [
+    {
+      step: 1,
+      instruction: "Click on Add Image to upload up to 10 images"
     },
+    {
+      step: 2, 
+      instruction: "Rearrange the order of images as needed"
+    },
+    {
+      step: 3,
+      instruction: "Enter your Instagram Profile URL at the bottom"
+    },
+    {
+      step: 4,
+      instruction: "Save and preview the gallery on your store"
+    }
+  ],
+  specifications: [
+    {
+      icon: "🖼️",
+      label: "Max Images",
+      value: "10"
+    },
+    {
+      icon: "📐",
+      label: "Layout",
+      value: "Grid"
+    },
+    {
+      icon: "📱",
+      label: "Responsive",
+      value: "Yes"
+    },
+    {
+      icon: "🔗",
+      label: "Profile Link",
+      value: "Optional"
+    }
+  ],
+  benefits: [
+    "Increase social media engagement",
+    "Showcase user-generated content", 
+    "Build brand authenticity",
+    "Drive Instagram followers"
+  ],
+  image: "/images/instagram-gallery.png"
+},
     {
       id: 6,
       title: "Contact Map",

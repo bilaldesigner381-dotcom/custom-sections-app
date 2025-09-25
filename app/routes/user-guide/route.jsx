@@ -391,7 +391,67 @@ export default function UserGuide() {
                     </div>
                   </div>
                 )}
+  <section key={section.id} className={styles.sectionCard}>
+  <div className={styles.sectionHeader}>
+    <div className={styles.sectionIcon}>{section.icon}</div>
+    <div>
+      <h2 className={styles.sectionTitle}>
+        {section.id}. {section.title}
+      </h2>
+      <p className={styles.sectionDescription}>{section.description}</p>
+    </div>
+  </div>
 
+  <div className={styles.sectionFeatures}>
+    <h4>✨ Features</h4>
+    <ul className={styles.featuresList}>
+      {section.features.map((feature, index) => (
+        <li key={index} className={styles.featureItem}>
+          {feature}
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  {section.configuration && (
+    <div className={styles.configurationSection}>
+      <h4>⚙️ Configuration Options</h4>
+      <ul className={styles.featuresList}>
+        {section.configuration.map((step, index) => (
+          <li key={index} className={styles.featureItem}>
+            {step}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+
+  {section.proTip && (
+    <div className={styles.proTip}>
+      <div className={styles.proTipIcon}>💡</div>
+      <div>
+        <strong>Pro Tip:</strong> {section.proTip}
+      </div>
+    </div>
+  )}
+
+  <div className={styles.sectionImage}>
+    <img 
+      src={section.image} 
+      alt={section.title}
+      className={styles.image}
+    />
+    <div className={styles.imageCaption}>
+      Example of the {section.title} Section
+    </div>
+  </div>
+
+  <div className={styles.supportLink}>
+    <a href="/support" className={styles.supportButton}>
+      Need Help? Contact Support →
+    </a>
+  </div>
+</section>
                 {/* Layout Modes (Featured Collection) */}
                 {section.layoutModes && (
                   <div className={styles.layoutModesSection}>

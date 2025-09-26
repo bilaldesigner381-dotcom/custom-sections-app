@@ -133,8 +133,8 @@ export default function PrivacyPolicy() {
               <div className={styles.contactIcon}>📧</div>
               <div>
                 <p>Have questions about our Privacy Policy?</p>
-                <a href="mailto:support@sectionmaster.com" className={styles.contactLink}>
-                  support@sectionmaster.com
+                <a href="mailto:sectionmasterapp@gmail.com" className={styles.contactLink}>
+                  sectionmasterapp@gmail.com
                 </a>
                 <p className={styles.contactResponse}>We typically respond within 24 hours</p>
               </div>

@@ -453,7 +453,7 @@ export default function UserGuide() {
                     📞 Contact Support
                   </a>
                   <a
-                    href="mailto:support@sectionmasterapp.com"
+                    href="mailto:sectionmasterapp@gmail.com"
                     className={styles.helpLink}
                   >
                     📧 Email Us

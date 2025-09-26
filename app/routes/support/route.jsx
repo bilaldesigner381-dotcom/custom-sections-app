@@ -23,8 +23,8 @@ export default function Support() {
                 <div>
                   <h3>Email Support</h3>
                   <p>Send us an email and we'll get back to you quickly</p>
-                  <a href="mailto:support@sectionmasterapp.com" className={styles.emailLink}>
-                    support@sectionmasterapp.com
+                  <a href="mailto:sectionmasterapp@gmail.com" className={styles.emailLink}>
+                   sectionmasterapp@gmail.com
                   </a>
                 </div>
               </div>

@@ -138,8 +138,8 @@ export default function TermsOfService() {
                 <h3 className={styles.termTitle}>Contact Us</h3>
                 <p className={styles.termText}>
                   If you have any questions about these Terms, please contact us at:{" "}
-                  <a className={styles.link} href="mailto:support@sectionmasterapp.com">
-                    support@sectionmasterapp.com
+                  <a className={styles.link} href="mailto:sectionmasterapp@gmail.com">
+                    sectionmasterapp@gmail.com
                   </a>
                 </p>
               </div>

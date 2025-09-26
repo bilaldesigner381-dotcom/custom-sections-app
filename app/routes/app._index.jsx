@@ -47,7 +47,7 @@ export default function AppDashboard() {
             </InlineStack>
             <TextContainer>
               <Text variant="bodyMd" as="p">
-                Access <strong>3 free sections</strong> instantly! Upgrade to unlock all <strong>15 premium sections</strong> for just $9/month.
+                Access <strong>3 free sections</strong> instantly! Upgrade to unlock all <strong>13 premium sections</strong> for just $9/month.
               </Text>
             </TextContainer>
           </Card>

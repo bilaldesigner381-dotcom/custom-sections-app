@@ -175,7 +175,7 @@ export default function UpgradePage() {
                 <List.Item>
                   <InlineStack gap="3" blockAlign="center">
                     <Icon source={CheckIcon} tone="success" />
-                    <Text variant="bodyMd">12 Premium Sections (13 total)</Text>
+                    <Text variant="bodyMd">10 Premium Sections (13 total)</Text>
                   </InlineStack>
                 </List.Item>
                 <List.Item>
@@ -286,11 +286,6 @@ export default function UpgradePage() {
               After upgrading, all premium sections will instantly appear in your 
               theme editor under <strong>Apps → Section Master</strong>. No setup required!
             </Text>
-            <Box paddingBlockStart="2">
-              <Button variant="plain" url="/app/sections">
-                View All Sections
-              </Button>
-            </Box>
           </Card>
 
           {/* Support Card */}

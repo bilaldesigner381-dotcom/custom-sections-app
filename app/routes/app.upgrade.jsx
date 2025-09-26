@@ -127,7 +127,7 @@ export default function UpgradePage() {
         <Box padding="6">
           <Banner tone="success">
             <Text variant="headingMd">🎉 You're already a Pro member!</Text>
-            <Text variant="bodyMd">You have full access to all 15 premium sections.</Text>
+            <Text variant="bodyMd">You have full access to all 13 premium sections.</Text>
           </Banner>
           <Box paddingBlockStart="4">
             <Button url="/app/sections">View All Sections</Button>
@@ -141,7 +141,7 @@ export default function UpgradePage() {
     <Page>
       <div style={{ padding: '1rem 0', marginBottom: '2rem' }}>
         <Text variant="heading2xl" as="h1">Upgrade to Pro</Text>
-        <Text variant="bodyMd" tone="subdued">Unlock all 15 premium sections for your store</Text>
+        <Text variant="bodyMd" tone="subdued">Unlock all 13 premium sections for your store</Text>
       </div>
 
       <Layout>
@@ -175,7 +175,7 @@ export default function UpgradePage() {
                 <List.Item>
                   <InlineStack gap="3" blockAlign="center">
                     <Icon source={CheckIcon} tone="success" />
-                    <Text variant="bodyMd">12 Premium Sections (15 total)</Text>
+                    <Text variant="bodyMd">12 Premium Sections (13 total)</Text>
                   </InlineStack>
                 </List.Item>
                 <List.Item>
@@ -271,14 +271,12 @@ export default function UpgradePage() {
               <List.Item>Countdown Timer</List.Item>
               <List.Item>Featured Collection</List.Item>
               <List.Item>Featured Product</List.Item>
-              <List.Item>Hero Banner</List.Item>
               <List.Item>Newsletter Signup</List.Item>
               <List.Item>Instagram Gallery</List.Item>
               <List.Item>Hero Banner Slider</List.Item>
               <List.Item>Logo Carousel</List.Item>
               <List.Item>Services Feature</List.Item>
               <List.Item>Video Section</List.Item>
-              <List.Item>Blog Highlights</List.Item>
               <List.Item>Contact + Map</List.Item>
             </List>
           </Card>

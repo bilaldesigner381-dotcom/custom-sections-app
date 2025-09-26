@@ -84,7 +84,7 @@ export default function AppDashboard() {
                   <Text variant="bodyMd" tone="subdued">per month</Text>
                   
                   <List>
-                    <List.Item>✅ All 15 Premium Sections</List.Item>
+                    <List.Item>✅ All 13 Premium Sections</List.Item>
                     <List.Item>✅ Priority Support</List.Item>
                     <List.Item>✅ Regular Updates</List.Item>
                     <List.Item>✅ Custom Requests</List.Item>
@@ -111,9 +111,6 @@ export default function AppDashboard() {
                   <List.Item>2. Testimonials</List.Item>
                   <List.Item>3. FAQ Section</List.Item>
                 </List>
-                <Box padding="2">
-                  <Button url="/app/sections?plan=free">Use Free Sections</Button>
-                </Box>
               </Layout.Section>
               
               <Layout.Section oneHalf>
@@ -125,21 +122,14 @@ export default function AppDashboard() {
                   <List.Item>4. Countdown Timer</List.Item>
                   <List.Item>5. Featured Collection</List.Item>
                   <List.Item>6. Featured Product</List.Item>
-                  <List.Item>7. Hero Banner</List.Item>
-                  <List.Item>8. Newsletter Signup</List.Item>
-                  <List.Item>9. Instagram Gallery</List.Item>
-                  <List.Item>10. Hero Banner Slider</List.Item>
-                  <List.Item>11. Logo Carousel</List.Item>
-                  <List.Item>12. Services Feature</List.Item>
-                  <List.Item>13. Video Section</List.Item>
-                  <List.Item>14. Blog Highlights</List.Item>
-                  <List.Item>15. Contact + Map</List.Item>
+                  <List.Item>7. Newsletter Signup</List.Item>
+                  <List.Item>8. Instagram Gallery</List.Item>
+                  <List.Item>9. Hero Banner Slider</List.Item>
+                  <List.Item>10. Logo Carousel</List.Item>
+                  <List.Item>11. Services Feature</List.Item>
+                  <List.Item>12. Video Section</List.Item>
+                  <List.Item>13. Contact + Map</List.Item>
                 </List>
-                <Box padding="2">
-                  <Button primary url="/app/upgrade">
-                    Unlock All Sections
-                  </Button>
-                </Box>
               </Layout.Section>
             </Layout>
           </Card>
@@ -187,16 +177,6 @@ export default function AppDashboard() {
           <Card title="⚡ Quick Start" sectioned>
             <List>
               <List.Item>
-                <Link url="/app/sections?plan=free" removeUnderline>
-                  <Button fullWidth>Use Free Sections</Button>
-                </Link>
-              </List.Item>
-              <List.Item>
-                <Link url="/app/templates" removeUnderline>
-                  <Button fullWidth>View Templates</Button>
-                </Link>
-              </List.Item>
-              <List.Item>
                 <Link url="/app/upgrade" removeUnderline>
                   <Button fullWidth primary>
                     Upgrade to Pro - $9/month
@@ -212,7 +192,10 @@ export default function AppDashboard() {
                 Need help or have questions about upgrading?
               </Text>
               <div style={{ marginTop: '1rem' }}>
-                <Button url="/app/support" outline>
+                <Button 
+                  url="https://custom-sections-app-4hst.vercel.app/support" 
+                  outline
+                >
                   Contact Support
                 </Button>
               </div>
